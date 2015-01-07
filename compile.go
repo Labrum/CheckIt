@@ -22,12 +22,15 @@ import(
 	"strings"
 	"os"
 	"io/ioutil"
+	"math/rand"
+	"crypto/md5"
+	"encoding/binary"
 )
 
 
 func writefile(filename string, body []byte, ext string){
 	
-	err := ioutil.WriteFile(tempDirectory+filename+ext, body,0777)
+	err := ioutil.WriteFile(filename+ext, body,0777)
 	if(err!= nil){
 		return
 	}
@@ -69,7 +72,8 @@ func run( args...string) ( out []byte, err error){
 	
 	cmd.Stdout = &buff
 	cmd.Stderr = cmd.Stdout
-	cmd.Dir = tempDirectory
+	cmd.Dir = "./"+tempDirectory+"/"
+
 	err = cmd.Run()	
 	out = buff.Bytes()
 	if err!= nil{
@@ -78,10 +82,16 @@ func run( args...string) ( out []byte, err error){
 	}
 	return out, err	
 }
-
+var tempDirectory = ""
 func Compile(dir string, filename string,body []byte,lang language) (out []byte,err error){
-	os.Mkdir("./tmp",0777)
-	writefile(dir+filename,body, lang.Extension )
+
+	b := make([]byte, 2)
+	binary.LittleEndian.PutUint16(b, uint16(rand.Intn(1000)))
+	hash := md5.Sum(b)
+	
+	tempDirectory = fmt.Sprintf("%x",hash) 
+	os.Mkdir("./"+tempDirectory,0777)
+	writefile("./"+tempDirectory+"/"+filename,body, lang.Extension )
 	
 	if noCompiler := strings.EqualFold("",lang.Compiler); !noCompiler{
 		out,err = compile(lang.Compiler,filename+lang.Extension)	
@@ -97,7 +107,7 @@ func Compile(dir string, filename string,body []byte,lang language) (out []byte,
 		out, err = run(lang.Runner, filename)
 	}
 
-	//defer os.RemoveAll(tempDirectory)
+	defer os.RemoveAll("./"+tempDirectory)
 
 	return 
 }

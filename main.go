@@ -82,7 +82,6 @@ func (this Boxes) Swap(i, j int) {
 }
 
 var boxes = []*Box{}
-var tempDirectory string = "./tmp/"
 var page = Page{}
 
 var (
