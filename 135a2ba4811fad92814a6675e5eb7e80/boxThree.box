@@ -1,1 +1,0 @@
-{"Id":"boxThree","Head":"Hi","SubHead":"Gophers unite","Text":"This text doesn't have to be latin","Lang":"go","Body":"package main\n\nimport( \"fmt\")\nfunc main(){\n\u0009fmt.Println(\"Hi\")\n}","Output":"","ErrorOut":""}
