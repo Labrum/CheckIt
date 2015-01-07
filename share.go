@@ -20,9 +20,8 @@ import(
 	"crypto/md5"
 	"fmt"
 	"os"
-	"io/ioutil"
-	"bufio"
-	"strings"
+	"io/ioutil"	
+	"encoding/json"
 )
 
 func Share() string {
@@ -54,60 +53,34 @@ func ReadPage(filename string) *Page{
 
 	f, _ := os.Open(filename)
 
-	rd := bufio.NewReader(f)
-
+	file, _ := ioutil.ReadAll(f)
+	
 	p := Page{}
 
-	title, _ := rd.ReadString(byte(','))
-	heading, _ := rd.ReadString(byte(','))
-	subHeading, _ := rd.ReadString(byte(','))
-	author, _ := rd.ReadString(byte(','))
+	if err := json.Unmarshal(file, &p); err != nil {
+        panic(err)
+    }
 
-	p.Title= strings.TrimSuffix(title,",")
-	p.Heading = strings.TrimSuffix(heading,",")
-	p.SubHeading = strings.TrimSuffix(subHeading,",")
-	p.Author = strings.TrimSuffix(author,",")
+    return &p
 
-
-	fmt.Println(p.Title)
-	fmt.Println(p.Heading)
-	fmt.Println(p.SubHeading)
-	fmt.Println(p.Author)
-
-	return &p
 }
-
 
 func ReadBox(filename string) *Box{
 
 	f, _ := os.Open(filename)
-	box := Box{}
 
-	rd := bufio.NewReader(f)
-
-	box.Id,_ = rd.ReadString(byte(','))
-	box.Head,_ = rd.ReadString(byte(','))
-	box.SubHead,_ = rd.ReadString(byte(','))
-	box.Text,_ = rd.ReadString(byte(','))
-	box.Lang,_ = rd.ReadString(byte(','))
-	box.Body,_ = rd.ReadString(byte(','))
-	box.Output,_ = rd.ReadString(byte(','))
-	box.ErrorOut,_ = rd.ReadString(byte(','))
-
-    box.Id = strings.TrimSuffix(box.Id,",")
-	box.Head = strings.TrimSuffix(box.Head,",")
-	box.SubHead = strings.TrimSuffix(box.SubHead,",")
-	box.Text = strings.TrimSuffix(box.Text,",")
-	box.Lang = strings.TrimSuffix(box.Lang,",")
-	box.Body = strings.TrimSuffix(box.Body,",")
-	box.Output = strings.TrimSuffix(box.Output,",")
-	box.ErrorOut = strings.TrimSuffix(box.ErrorOut,",")
-
-
-
-	return &box
+	file, _ := ioutil.ReadAll(f)
 	
+	b := Box{}
+
+	if err := json.Unmarshal(file, &b); err != nil {
+        panic(err)
+    }
+
+    return &b
+
 }
+
 
 func writeSave(dir string,filename string, body []byte, ext string){
 	
@@ -119,37 +92,18 @@ func writeSave(dir string,filename string, body []byte, ext string){
 
 func Save(folderName string){
 	var buff bytes.Buffer
-
 	os.Mkdir(folderName,0777)
-	buff.WriteString(page.Title)
-	buff.WriteString(",")
-	buff.WriteString(page.Heading)
-	buff.WriteString(",")
-	buff.WriteString(page.SubHeading)
-	buff.WriteString(",")
-	buff.WriteString(page.Author)
+
+	temp,_ := json.Marshal(page)
+	buff.WriteString(string(temp))
 	writeSave(folderName,"page",buff.Bytes(),".page")
 	buff.Reset()
 
 	for key := range boxes {
-		buff.WriteString(boxes[key].Id)
-		buff.WriteString(",")
-		buff.WriteString(boxes[key].Head)
-		buff.WriteString(",")
-		buff.WriteString(boxes[key].SubHead)
-		buff.WriteString(",")
-		buff.WriteString(boxes[key].Text)
-		buff.WriteString(",")
-		buff.WriteString(boxes[key].Lang)
-		buff.WriteString(",")
-		buff.WriteString(boxes[key].Body)
-		buff.WriteString(",")
-		buff.WriteString(boxes[key].Output)
-		buff.WriteString(",")
-		buff.WriteString(boxes[key].ErrorOut)		
-
+		tmp,_ := json.Marshal(boxes[key])
+		buff.WriteString(string(tmp))
 		writeSave(folderName,boxes[key].Id,buff.Bytes(),".box")
 		buff.Reset()
-	}
+	}	
 
 }
