@@ -1,1 +1,0 @@
-print "Hello box 2" 
