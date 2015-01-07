@@ -1,0 +1,31 @@
+
+<head>
+<script src="jquery-1.11.1.min.js"></script>
+<script>
+$(function(){
+  $(".addbutton").click(){
+     if(".addedfields").length < 10){
+       $(".addedfields").append(
+         '<li><input type="text" name="field[]" class="textbox" />' + 
+         '<input type="button" class="removebutton" value="remove"/></li>'
+       );
+     }
+  }
+
+  // live event will automatically be attached to every new remove button
+  $(".removebutton").live("click",function(){
+     $(this).parent().remove();
+  });
+});
+
+</script>
+</head>
+<body>
+<form>
+<ul class="addedfields">
+<li><input type="text" name="field[]" class="textbox" />
+<input type="button" class="removebutton" value="remove"/></li>
+</ul>
+<input type="button" class="addbutton" value="add"/>
+</form>
+</body>
