@@ -1,6 +1,0 @@
-boxThree,Hi,Gophers unite,This text doesn't have to be latin,go,package main
-
-import( "fmt")
-func main(){
-	fmt.Println("Hi")
-},,
