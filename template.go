@@ -38,7 +38,7 @@ var headStyle = `<!DOCTYPE html>
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>1 Col Portfolio - Start Bootstrap Template</title>
+    <title>CheckIt</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="http://localhost:8088/css/bootstrap.min.css" rel="stylesheet">

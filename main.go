@@ -19,9 +19,7 @@ package main
 import (
 	"fmt"
 	"text/template"
-	"io/ioutil"
 	"net/http"
-	"os"
 	"flag"
 	"bytes"
 	"strings"
@@ -94,61 +92,6 @@ var (
 	templateDir = "./templates"
 	retDir = ".."
 )
-
-
-func (p *Page) save() error {
-	filename := snipDir+p.Title + ".txt"
-	return ioutil.WriteFile(filename, p.Body, 0600)
-}
-
-func loadPage(title string) (*Page, error) {
-	filename := snipDir + title + ".txt"
-	body, err := ioutil.ReadFile(filename)
-	if err != nil {
-		return nil, err
-	} 
-	return &Page{Title: title, Body: body}, nil
-}
-
-func renderTemplate(w http.ResponseWriter, tmp string, p *Page){
-	os.Chdir(templateDir)
-    t, _ := template.ParseFiles(tmp + ".html")
-    os.Chdir(retDir)
-    t.Execute(w,p)
-}
-
-func viewHandler(w http.ResponseWriter, r *http.Request) {
-	title := r.URL.Path[len("/view/"):]
-	pageNames,_ := filepath.Glob(title+"/*.page")
-	boxNames,_ := filepath.Glob(title+"/*.box")
-
-	pageName := pageNames[0]
-	fmt.Println(boxNames)
-
-	head.Execute(w,nil)
-	openBody.Execute(w,nil)
-
-	p := ReadPage(pageName)
-	pageStart.Execute(w,p)
-
-	boxes = []*Box{}
-	for key := range boxNames {
-		boxP :=  ReadBox(boxNames[key])
-		boxes = append(boxes,boxP)
-		box.Execute(w,boxP)
-
-	fmt.Println(boxP.Id)
-	fmt.Println(boxP.Head)
-	fmt.Println(boxP.SubHead)
-	fmt.Println(boxP.Text)
-	fmt.Println(boxP.Lang)
-	fmt.Println(boxP.Body)
-	fmt.Println(boxP.Output)
-	fmt.Println(boxP.ErrorOut)
-	}
-	pageClose.Execute(w,nil)
-	htmlClose.Execute(w,nil)
-}
 
 func baseCase(w http.ResponseWriter, r *http.Request){
 	page = Page{
@@ -267,19 +210,12 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 	
 }
 
-func editHandler(w http.ResponseWriter, r *http.Request) {
-    title := r.URL.Path[len("/edit/"):]
-    p, err := loadPage(title)
-    if err != nil {
-        p = &Page{Title: title}
-    }
-    renderTemplate(w, "edit", p)
-}
 
 var outputText = `<pre>{{printf "%s" . |html}}</pre>`
 var output = template.Must(template.New("output").Parse(outputText)) 
 var shareText = `{{printf "%s" . |html}}`
 var shareOutput = template.Must(template.New("shareOutput").Parse(shareText))
+
 // Compile is an HTTP handler that reads Go source code from the request,
 // runs the program (returning any errors),
 // and sends the program's output as the HTTP response.
@@ -304,8 +240,6 @@ func cmpile(w http.ResponseWriter, req *http.Request) {
 
 	updateBody(boxes,title,body.String())
 
-	//printBoxes(boxes)
-
 	if err!= nil{
 		w.WriteHeader(404)
 		output.Execute(w,out)
@@ -324,8 +258,6 @@ func sharHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	fmt.Println("cool beans")
-	http.HandleFunc("/view/", viewHandler)
-	http.HandleFunc("/edit/", editHandler)
 	http.HandleFunc("/share/", sharHandler)
 	http.HandleFunc("/", FrontPage)
 	http.HandleFunc("/compile/", cmpile)
