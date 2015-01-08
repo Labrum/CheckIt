@@ -22,6 +22,8 @@ var head = template.Must(template.New("head").Parse(headStyle)) // HTML template
 var openBody = template.Must(template.New("openBody").Parse(body))
 var pageStart = template.Must(template.New("pageStart").Parse(pageStartText))
 var box = template.Must(template.New("box").Parse(boxText))
+var about = template.Must(template.New("about").Parse(aboutText))
+var contact = template.Must(template.New("contact").Parse(contactText))
 var pageClose = template.Must(template.New("pageClose").Parse(pageCloseText))
 var htmlClose =template.Must(template.New("htmlClose").Parse(htmlCloseText))
 
@@ -78,13 +80,10 @@ var body = `<body>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="#">About</a>
+                        <a href="/about">About</a>
                     </li>
                     <li>
-                        <a href="#">Services</a>
-                    </li>
-                    <li>
-                        <a href="#">Contact</a>
+                        <a href="/contact">Contact</a>
                     </li>
                     <li>
                         <a  href="#" onclick="save();return false;">Share</a>
@@ -129,31 +128,45 @@ var boxText = `        <!-- Project One -->
         <!-- /.row -->
         <hr>`
 
-var pageCloseText =`
-        <!-- Pagination -->
-        <div class="row text-center">
-            <div class="col-lg-12">
-                <ul class="pagination">
-                    <li>
-                        <a href="#">&laquo;</a>
-                    </li>
-                    <li class="active">
-                        <a href="#">1</a>
-                    <li>
-                        <a href="#">&raquo;</a>
-                    </li>
+var aboutText = `        <!-- Project One -->
+        <div id={{.Id}} class="row">
+            <div class="col-md-7">
+                <h4>{{.Text}}</h4>              
+            </div>
+            <div class="col-md-5">
+                                
+            </div>
+        </div>
+        <div id = {{ print .Id |html}}errors class="alert hide alert-danger"><p></p></div>
+        <div id={{ print .Id |html}}output class="alert hide alert-success"><p></p></div>
+        <!-- /.row -->`
+
+var contactText = `        <!-- Project One -->
+        <div id={{.Id}} class="row">
+            <div class="col-md-7">
+                
+            </div>
+            <div class="col-md-5">
+                <ul>
+                    <li><h3>{{.Head}}</h3></li>
+                    <li><h3>{{.SubHead}}</h3></li>
                 </ul>
             </div>
         </div>
+        <div id = {{ print .Id |html}}errors class="alert hide alert-danger"><p></p></div>
+        <div id={{ print .Id |html}}output class="alert hide alert-success"><p></p></div>
         <!-- /.row -->
+        <hr>`
 
+var pageCloseText =`
+        
         <hr>
 
         <!-- Footer -->
         <footer>
             <div class="row">
                 <div class="col-lg-12">
-                    <p>Copyright &copy; Your Website 2014</p>
+                    <p>Copyright &copy; CheckIt 2015</p>
                 </div>
             </div>
             <!-- /.row -->

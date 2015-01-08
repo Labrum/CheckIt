@@ -104,7 +104,7 @@ func baseCase(w http.ResponseWriter, r *http.Request){
 	}	
 
 	boxOne := Box{
-		Id : "box" ,
+		Id : "A" ,
 		Head : "Hello",
 		SubHead :"My First program",
 		Text : "Lorem ipsum dolor sit amet",
@@ -114,7 +114,7 @@ func baseCase(w http.ResponseWriter, r *http.Request){
 		ErrorOut :  "",
 	}
 	boxTwo := Box{
-		Id : "pox" ,
+		Id : "B" ,
 		Lang : "java",
 		Body : `public class pox{
    public static void main(String [] args){
@@ -128,7 +128,7 @@ func baseCase(w http.ResponseWriter, r *http.Request){
 		ErrorOut :  "",
 	}
 	boxThree := Box{
-		Id : "boxThree" ,
+		Id : "C" ,
 		Head : "Hi",
 		SubHead :"Gophers unite",
 		Text : "This text doesn't have to be latin",
@@ -211,6 +211,72 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 	
 }
 
+func AboutPage(w http.ResponseWriter, r *http.Request) {
+	head.Execute(w,nil)
+	openBody.Execute(w,nil)
+	p := Page{
+		Title : "",
+		Heading : "About",
+		SubHeading : "The CheckIt Project",
+		Author :"",
+		Body: nil,
+	}
+
+	boxThree := Box{
+		Id : "C" ,
+		Head : "Tel : 076 111 1111",
+		SubHead :"Author : Steven Labrum",
+		Text : "CheckIt is for the demonstration, sharing and storing of code snippets",
+		Lang : "go",
+		Body : `package main
+
+import( "fmt")
+func main(){
+	fmt.Println("Hi")
+}`,
+		Output : "",
+		ErrorOut :  "",
+	}
+	pageStart.Execute(w,p)
+	about.Execute(w,boxThree)
+	pageClose.Execute(w,nil)
+	htmlClose.Execute(w,nil)
+		
+}
+
+func ContactPage(w http.ResponseWriter, r *http.Request) {
+	head.Execute(w,nil)
+	openBody.Execute(w,nil)
+	p := Page{
+		Title : "",
+		Heading : "Contact",
+		SubHeading : "I'm going to have to change some things here",
+		Author :"",
+		Body: nil,
+	}	
+	pageStart.Execute(w,p)
+	boxThree := Box{
+		Id : "C" ,
+		Head : "Tel : 076 111 1111",
+		SubHead :"Author : Steven Labrum",
+		Text : "CheckIt is for the demonstration, sharing and storing of code snippets",
+		Lang : "go",
+		Body : `package main
+
+import( "fmt")
+func main(){
+	fmt.Println("Hi")
+}`,
+		Output : "",
+		ErrorOut :  "",
+	}
+	contact.Execute(w,boxThree)
+	pageClose.Execute(w,nil)
+	htmlClose.Execute(w,nil)
+		
+}
+
+
 
 var outputText = `<pre>{{printf "%s" . |html}}</pre>`
 var output = template.Must(template.New("output").Parse(outputText)) 
@@ -260,6 +326,8 @@ func sharHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	fmt.Println("cool beans")
 	http.HandleFunc("/share/", sharHandler)
+	http.HandleFunc("/about", AboutPage)
+	http.HandleFunc("/contact", ContactPage)
 	http.HandleFunc("/", FrontPage)
 	http.HandleFunc("/compile/", cmpile)
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
