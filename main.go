@@ -217,7 +217,7 @@ var output = template.Must(template.New("output").Parse(outputText))
 var shareText = `{{printf "%s" . |html}}`
 var shareOutput = template.Must(template.New("shareOutput").Parse(shareText))
 
-// Compile is an HTTP handler that reads Go source code from the request,
+// Compile is an HTTP handler that reads Source code from the request,
 // runs the program (returning any errors),
 // and sends the program's output as the HTTP response.
 func cmpile(w http.ResponseWriter, req *http.Request) {
