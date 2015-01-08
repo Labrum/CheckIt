@@ -36,6 +36,18 @@ type Page struct {
 	Body []byte
 }
 
+type Contact struct{
+	Author string
+	TelNum string
+	Email string
+	Text string
+}
+
+type About struct{
+	Text string
+	SecondaryText string
+}
+
 type Box struct{
 	Id string
 	Head string
@@ -116,7 +128,7 @@ func baseCase(w http.ResponseWriter, r *http.Request){
 	boxTwo := Box{
 		Id : "B" ,
 		Lang : "java",
-		Body : `public class pox{
+		Body : `public class B{
    public static void main(String [] args){
         System.out.println("hello");
     }
@@ -212,8 +224,6 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func AboutPage(w http.ResponseWriter, r *http.Request) {
-	head.Execute(w,nil)
-	openBody.Execute(w,nil)
 	p := Page{
 		Title : "",
 		Heading : "About",
@@ -222,58 +232,42 @@ func AboutPage(w http.ResponseWriter, r *http.Request) {
 		Body: nil,
 	}
 
-	boxThree := Box{
-		Id : "C" ,
-		Head : "Tel : 076 111 1111",
-		SubHead :"Author : Steven Labrum",
+	ab := About{
 		Text : "CheckIt is for the demonstration, sharing and storing of code snippets",
-		Lang : "go",
-		Body : `package main
-
-import( "fmt")
-func main(){
-	fmt.Println("Hi")
-}`,
-		Output : "",
-		ErrorOut :  "",
+		SecondaryText : "This is the secondary text",
 	}
+
+	head.Execute(w,nil)
+	openBody.Execute(w,nil)
 	pageStart.Execute(w,p)
-	about.Execute(w,boxThree)
+	about.Execute(w,ab)
 	pageClose.Execute(w,nil)
 	htmlClose.Execute(w,nil)
 		
 }
 
 func ContactPage(w http.ResponseWriter, r *http.Request) {
-	head.Execute(w,nil)
-	openBody.Execute(w,nil)
 	p := Page{
 		Title : "",
 		Heading : "Contact",
-		SubHeading : "I'm going to have to change some things here",
+		SubHeading : "",
 		Author :"",
 		Body: nil,
 	}	
-	pageStart.Execute(w,p)
-	boxThree := Box{
-		Id : "C" ,
-		Head : "Tel : 076 111 1111",
-		SubHead :"Author : Steven Labrum",
+	
+	con := Contact{
+		TelNum : "Tel : 076 111 1111",
+		Author :"Author : Steven Labrum",
 		Text : "CheckIt is for the demonstration, sharing and storing of code snippets",
-		Lang : "go",
-		Body : `package main
-
-import( "fmt")
-func main(){
-	fmt.Println("Hi")
-}`,
-		Output : "",
-		ErrorOut :  "",
+		Email : `Email : labrumsteven@gmail.com`,
 	}
-	contact.Execute(w,boxThree)
+
+	head.Execute(w,nil)
+	openBody.Execute(w,nil)
+	pageStart.Execute(w,p)
+	contact.Execute(w,con)
 	pageClose.Execute(w,nil)
-	htmlClose.Execute(w,nil)
-		
+	htmlClose.Execute(w,nil)	
 }
 
 

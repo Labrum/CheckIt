@@ -129,34 +129,30 @@ var boxText = `        <!-- Project One -->
         <hr>`
 
 var aboutText = `        <!-- Project One -->
-        <div id={{.Id}} class="row">
+        <div id=About class="row">
             <div class="col-md-7">
                 <h4>{{.Text}}</h4>              
             </div>
             <div class="col-md-5">
-                                
+                <p>{{.SecondaryText}}</p>                
             </div>
         </div>
-        <div id = {{ print .Id |html}}errors class="alert hide alert-danger"><p></p></div>
-        <div id={{ print .Id |html}}output class="alert hide alert-success"><p></p></div>
         <!-- /.row -->`
 
 var contactText = `        <!-- Project One -->
-        <div id={{.Id}} class="row">
+        <div id=Contact class="row">
             <div class="col-md-7">
-                
+                <h4>{{.Text}}</h4>
             </div>
             <div class="col-md-5">
                 <ul>
-                    <li><h3>{{.Head}}</h3></li>
-                    <li><h3>{{.SubHead}}</h3></li>
+                    <li><h3>{{.Author}}</h3></li>
+                    <li><h3>{{.TelNum}}</h3></li>
+                    <li><h3>{{.Email}}</h3></li>
                 </ul>
             </div>
         </div>
-        <div id = {{ print .Id |html}}errors class="alert hide alert-danger"><p></p></div>
-        <div id={{ print .Id |html}}output class="alert hide alert-success"><p></p></div>
-        <!-- /.row -->
-        <hr>`
+        <!-- /.row -->`
 
 var pageCloseText =`
         
