@@ -1,8 +1,6 @@
 /*
 Copyright 2015 Steven Labrum
 
-Webserver
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -24,76 +22,8 @@ import (
 	"net/http"
 	"flag"
 	"bytes"
-	"strings"
 	"path/filepath"
 )
-
-type Page struct {
-	Title string
-	Heading string
-	SubHeading string
-	Author string
-	Body []byte
-}
-
-type Contact struct{
-	Author string
-	TelNum string
-	Email string
-	Text string
-}
-
-type About struct{
-	Text string
-	SecondaryText string
-}
-
-type Box struct{
-	Id string
-	Head string
-	SubHead string
-	Text string
-	Lang string
-	Body string
-	Output string
-	ErrorOut string
-}
-
-type Boxes []*Box
-
-func (this Boxes) Len() int {
-	return len(this)
-}
-
-func Lang(this []*Box,name string) string{
-
-	for key := range this {
-		if strings.EqualFold(this[key].Id,name){
-			return this[key].Lang
-		}
-	}
-	return ""
-}
-
-func updateBody(this []*Box,name string, bod string ) {
-	for key := range this {
-		if strings.EqualFold(this[key].Id,name){
-			this[key].Body = bod
-		}
-	}
-}
-
-func printBoxes(this []*Box){
-	for key := range this {
-		fmt.Print(this[key].Body);
-		
-	}
-
-}
-
-func (this Boxes) Swap(i, j int) {
-	this[i], this[j] = this[j], this[i]
-}
 
 var boxes = []*Box{}
 var page = Page{}
@@ -101,79 +31,31 @@ var page = Page{}
 var (
 	httpListen = flag.String("http", "127.0.0.1:3999", "host:port to listen on")
 	htmlOutput = flag.Bool("html", false, "render program output as HTML")
-	snipDir = "./snippets/"
-	templateDir = "./templates"
-	retDir = ".."
-)
+	)
+
+
 
 func baseCase(w http.ResponseWriter, r *http.Request){
-	page = Page{
-		Title : "",
-		Heading : "Testing",
-		SubHeading : "this is a SubHeading",
-		Author :"",
-		Body: nil,
-	}	
 
-	boxOne := Box{
-		Id : "A" ,
-		Head : "Hello",
-		SubHead :"My First program",
-		Text : "Lorem ipsum dolor sit amet",
-		Lang : "python",
-		Body : `print "Hello World" `,
-		Output : "",
-		ErrorOut :  "",
-	}
-	boxTwo := Box{
-		Id : "B" ,
-		Lang : "java",
-		Body : `public class B{
-   public static void main(String [] args){
-        System.out.println("hello");
-    }
-} `,
-		Head : "Hello Again",
-		SubHead :"I'm in java!",
-		Text : "Ipsum dolor sit amet",
-		Output : "",
-		ErrorOut :  "",
-	}
-	boxThree := Box{
-		Id : "C" ,
-		Head : "Hi",
-		SubHead :"Gophers unite",
-		Text : "This text doesn't have to be latin",
-		Lang : "go",
-		Body : `package main
-
-import( "fmt")
-func main(){
-	fmt.Println("Hi")
-}`,
-		Output : "",
-		ErrorOut :  "",
-	}
-
-	boxes = append(boxes, &boxOne)
-	boxes = append(boxes, &boxTwo)
-	boxes = append(boxes,&boxThree)
+	page,boxes = InitDefault()
 
 	head.Execute(w,nil)
 	openBody.Execute(w,nil)
 	pageStart.Execute(w,page)
-	box.Execute(w,boxOne)
-	box.Execute(w,boxTwo)
-	box.Execute(w,boxThree)
+
+	for key := range boxes {
+		box.Execute(w,boxes[key])
+	}
+
 	pageClose.Execute(w,nil)
 	htmlClose.Execute(w,nil)
 
 }
 
-// FrontPage is an HTTP handler that renders the goplay interface.
-// If a filename is supplied in the path component of the URI,
-// its contents will be put in the interface's text area.
-// Otherwise, the default "hello, world" program is displayed.
+/*  FrontPage is an HTTP handler that displays the basecase
+	unless a stored page is being loaded.
+
+*/ 
 func FrontPage(w http.ResponseWriter, r *http.Request) {
 	title := r.URL.Path[len("/"):]
 
@@ -206,37 +88,17 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 				boxP :=  ReadBox(boxNames[key])
 				boxes = append(boxes,boxP)
 				box.Execute(w,boxP)
-
-			fmt.Println(boxP.Id)
-			fmt.Println(boxP.Head)
-			fmt.Println(boxP.SubHead)
-			fmt.Println(boxP.Text)
-			fmt.Println(boxP.Lang)
-			fmt.Println(boxP.Body)
-			fmt.Println(boxP.Output)
-			fmt.Println(boxP.ErrorOut)
 			}
 			pageClose.Execute(w,nil)
 			htmlClose.Execute(w,nil)
 		}	
 	}
-	
 }
 
+
 func AboutPage(w http.ResponseWriter, r *http.Request) {
-	p := Page{
-		Title : "",
-		Heading : "About",
-		SubHeading : "The CheckIt Project",
-		Author :"",
-		Body: nil,
-	}
-
-	ab := About{
-		Text : "CheckIt is for the demonstration, sharing and storing of code snippets",
-		SecondaryText : "This is the secondary text",
-	}
-
+	p,ab := InitAbout()
+	
 	head.Execute(w,nil)
 	openBody.Execute(w,nil)
 	pageStart.Execute(w,p)
@@ -246,22 +108,12 @@ func AboutPage(w http.ResponseWriter, r *http.Request) {
 		
 }
 
-func ContactPage(w http.ResponseWriter, r *http.Request) {
-	p := Page{
-		Title : "",
-		Heading : "Contact",
-		SubHeading : "",
-		Author :"",
-		Body: nil,
-	}	
-	
-	con := Contact{
-		TelNum : "Tel : 076 111 1111",
-		Author :"Author : Steven Labrum",
-		Text : "CheckIt is for the demonstration, sharing and storing of code snippets",
-		Email : `Email : labrumsteven@gmail.com`,
-	}
 
+
+func ContactPage(w http.ResponseWriter, r *http.Request) {
+
+	p,con := InitContact()
+	
 	head.Execute(w,nil)
 	openBody.Execute(w,nil)
 	pageStart.Execute(w,p)
@@ -282,7 +134,6 @@ var shareOutput = template.Must(template.New("shareOutput").Parse(shareText))
 // and sends the program's output as the HTTP response.
 func cmpile(w http.ResponseWriter, req *http.Request) {
 
-	//dir string, filename string,body []byte,lang language
 	title := req.URL.Path[len("/compile/"):]
 	fmt.Println(title+" This is the title")
 

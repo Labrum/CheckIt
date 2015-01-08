@@ -1,8 +1,6 @@
 /*
 Copyright 2015 Steven Labrum
 
-Default compile methods.
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -91,7 +89,7 @@ func Compile(dir string, filename string,body []byte,lang language) (out []byte,
 	binary.LittleEndian.PutUint16(b, uint16(rand.Intn(1000)))
 	hash := md5.Sum(b)
 	
-	tempDirectory = fmt.Sprintf("%x",hash) 
+	tempDirectory = fmt.Sprintf("%x",hash)
 	os.Mkdir("./"+tempDirectory,0777)
 	writefile("./"+tempDirectory+"/"+filename,body, lang.Extension )
 	
