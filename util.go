@@ -21,6 +21,10 @@ import (
 	"strings"
 )
 
+type CompileOut struct{
+	Out []byte
+	Error error
+}
 
 type Page struct {
 	Title string
@@ -44,6 +48,8 @@ type About struct{
 
 type Box struct{
 	Id string
+	Position string
+	Total int
 	Head string
 	SubHead string
 	Text string

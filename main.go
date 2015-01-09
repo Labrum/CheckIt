@@ -20,11 +20,14 @@ import (
 	"fmt"
 	"text/template"
 	"net/http"
+	"strconv"
+	"strings"
 	"flag"
 	"bytes"
 	"path/filepath"
 )
 
+var outputs = [10]*CompileOut{}
 var boxes = []*Box{}
 var page = Page{}
 
@@ -32,8 +35,6 @@ var (
 	httpListen = flag.String("http", "127.0.0.1:3999", "host:port to listen on")
 	htmlOutput = flag.Bool("html", false, "render program output as HTML")
 	)
-
-
 
 func baseCase(w http.ResponseWriter, r *http.Request){
 
@@ -108,8 +109,6 @@ func AboutPage(w http.ResponseWriter, r *http.Request) {
 		
 }
 
-
-
 func ContactPage(w http.ResponseWriter, r *http.Request) {
 
 	p,con := InitContact()
@@ -122,8 +121,6 @@ func ContactPage(w http.ResponseWriter, r *http.Request) {
 	htmlClose.Execute(w,nil)	
 }
 
-
-
 var outputText = `<pre>{{printf "%s" . |html}}</pre>`
 var output = template.Must(template.New("output").Parse(outputText)) 
 var shareText = `{{printf "%s" . |html}}`
@@ -135,9 +132,14 @@ var shareOutput = template.Must(template.New("shareOutput").Parse(shareText))
 func cmpile(w http.ResponseWriter, req *http.Request) {
 
 	title := req.URL.Path[len("/compile/"):]
-	fmt.Println(title+" This is the title")
-
+	
+	
+	str := strings.Split(title, "/")
+	title = str[0]
+	fmt.Println(title)
 	body := new(bytes.Buffer)
+	position,_ := strconv.Atoi(str[1])
+
 	if _, err := body.ReadFrom(req.Body); err != nil {
 		return
 	}	
@@ -145,10 +147,59 @@ func cmpile(w http.ResponseWriter, req *http.Request) {
 	langName := Lang(boxes,title)
 
 	var lang = getLang(langName)
-	p,_ := Compile("",title,body.Bytes(), *lang)
+//	p,_ := Compile("",title,nil,body.Bytes(), *lang)
 	
-	fmt.Println(string(p))
-	out, err := Compile("",title,body.Bytes(), *lang)
+//	fmt.Println(string(p))
+	out, err := Compile("",title,nil,body.Bytes(), *lang)
+
+	compOut := CompileOut{Out : out, Error : err, }
+
+	outputs[position-1] = &compOut
+
+	updateBody(boxes,title,body.String())
+	fmt.Println(string(out))
+	if err!= nil{
+		w.WriteHeader(404)
+		output.Execute(w,out)
+	}else if *htmlOutput {
+		w.Write(out)
+	} else {
+		output.Execute(w, out)
+	}
+}
+
+// Compile is an HTTP handler that reads Source code from the request,
+// runs the program (returning any errors),
+// and sends the program's output as the HTTP response.
+func pipeCompile(w http.ResponseWriter, req *http.Request) {
+
+	title := req.URL.Path[len("/pipeile/"):]
+	
+	fmt.Println(title)
+	str := strings.Split(title, "/")
+	title = str[0]
+	
+	position,_ := strconv.Atoi(str[1])
+
+	body := new(bytes.Buffer)
+
+	if _, err := body.ReadFrom(req.Body); err != nil {
+		return
+	}	
+
+	langName := Lang(boxes,title)
+
+	fmt.Println(position)
+
+	var lang = getLang(langName)
+//	p,_ := Compile("",title,outputs[position-2].Out,body.Bytes(), *lang)
+
+//	fmt.Println(string(p))
+	out, err := Compile("",title,outputs[position-2].Out,body.Bytes(), *lang)
+
+	compOut := CompileOut{Out : out, Error : err, }
+
+	outputs[position-1] = &compOut
 
 	updateBody(boxes,title,body.String())
 
@@ -175,12 +226,12 @@ func main() {
 	http.HandleFunc("/contact", ContactPage)
 	http.HandleFunc("/", FrontPage)
 	http.HandleFunc("/compile/", cmpile)
+	http.HandleFunc("/pipeile/",pipeCompile)
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
 	http.Handle("/fonts/", http.StripPrefix("/fonts/", http.FileServer(http.Dir("fonts"))))
 	http.Handle("/js/", http.StripPrefix("/js", http.FileServer(http.Dir("js"))))
 	http.ListenAndServe(":8088", nil)
 }
-
 
 var helloWorld = []byte(`package main
 

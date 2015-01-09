@@ -107,7 +107,6 @@ function share(){
 }
 
 
-
 function autocompile() {
     if(!document.getElementById("autocompile").checked) {
         return;
@@ -115,16 +114,25 @@ function autocompile() {
     compile();
 }
 
-function compile(name) {
+function compile(name , position) {
     var search = name.concat("edit");
     var prog = document.getElementById(search).value;
-
+    var pipe = document.getElementById(name.concat("pipe")).checked
     var req = new XMLHttpRequest();
     xmlreq = req;
+    
     req.onreadystatechange = function(){compileUpdate(name);}
-    req.open("POST", "http://localhost:8088/compile/".concat(name), true);
-    req.setRequestHeader("Content-Type", "text/plain; charset=utf-8");
-    req.send(prog); 
+    position = "/".concat(position)
+    nameCat = name.concat(position)
+    if(pipe){
+        req.open("POST", "http://localhost:8088/pipeile/".concat(nameCat), true);
+        req.setRequestHeader("Content-Type", "text/plain; charset=utf-8");
+        req.send(prog);
+     }else{
+        req.open("POST", "http://localhost:8088/compile/".concat(nameCat), true);
+        req.setRequestHeader("Content-Type", "text/plain; charset=utf-8");
+        req.send(prog);
+    } 
 }
 
 function compileUpdate(boxId) {
@@ -132,6 +140,8 @@ function compileUpdate(boxId) {
     if(!req || req.readyState != 4) {
         return;
     }
+
+    console.log()
     var out = document.getElementById(boxId.concat("output"))
     var err = document.getElementById(boxId.concat("errors"))
     if(req.status == 200) {

@@ -69,7 +69,10 @@ func run( args...string) ( out []byte, err error){
 		runner =append(runner,args[1:]...)
 		cmd = exec.Command(runner[0],runner[1:]...)
 	}
-	
+
+	f, err := os.Open("./"+tempDirectory+"/input.txt")
+
+	cmd.Stdin = f
 	cmd.Stdout = &buff
 	cmd.Stderr = cmd.Stdout
 	cmd.Dir = "./"+tempDirectory+"/"
@@ -80,10 +83,13 @@ func run( args...string) ( out []byte, err error){
 		fmt.Println(string(out))
 		return
 	}
+	os.Stdout.Write(out)
 	return out, err	
 }
+
 var tempDirectory = ""
-func Compile(dir string, filename string,body []byte,lang language) (out []byte,err error){
+
+func Compile(dir string, filename string,input []byte,body []byte,lang language) (out []byte,err error){
 
 	b := make([]byte, 2)
 	binary.LittleEndian.PutUint16(b, uint16(rand.Intn(1000)))
@@ -102,9 +108,19 @@ func Compile(dir string, filename string,body []byte,lang language) (out []byte,
 	}
 
 	if lang.RunWithExtension{
-		out, err = run(lang.Runner, filename+lang.Extension)
+		if input!=nil{
+			writefile("./"+tempDirectory+"/input",input,".txt")
+			out, err = run(lang.Runner, filename+lang.Extension,"input.txt")
+		}else{
+			out, err = run(lang.Runner, filename+lang.Extension)
+		}
 	}else{
-		out, err = run(lang.Runner, filename)
+		if input!=nil{
+			writefile("./"+tempDirectory+"/input",input,".txt")
+			out, err = run(lang.Runner, filename,"input.txt")
+		}else{
+			out, err = run(lang.Runner, filename)
+		}
 	}
 
 	defer os.RemoveAll("./"+tempDirectory)

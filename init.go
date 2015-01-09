@@ -16,8 +16,9 @@ limitations under the License.
 
 package main
 
+var BOXESONPAGE = 3
+
 func InitDefault() (p Page,boxs []*Box){
-	
 
 	p = Page{
 		Title : "",
@@ -29,6 +30,8 @@ func InitDefault() (p Page,boxs []*Box){
 
 	boxOne := Box{
 		Id : "A" ,
+		Position :"1",
+		Total : BOXESONPAGE,
 		Head : "Hello",
 		SubHead :"My First program",
 		Text : "Lorem ipsum dolor sit amet",
@@ -40,12 +43,31 @@ func InitDefault() (p Page,boxs []*Box){
 
 	boxTwo := Box{
 		Id : "B" ,
+		Position :"2",
+		Total : BOXESONPAGE,
 		Lang : "java",
-		Body : `public class B{
-   public static void main(String [] args){
-        System.out.println("hello");
-    }
-} `,
+		Body : `import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+ 
+public class B{
+ 
+	public static void main (String args[]) {
+ 
+	try{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+ 
+		String input;
+ 
+		while((input=br.readLine())!=null){
+			System.out.println("I can read: "+ input);
+		}
+ 
+	}catch(IOException io){
+		System.out.println("Faaaaiiillure");
+	}	
+  }
+}`,
 		Head : "Hello Again",
 		SubHead :"I'm in java!",
 		Text : "Ipsum dolor sit amet",
@@ -55,6 +77,8 @@ func InitDefault() (p Page,boxs []*Box){
 
 	boxThree := Box{
 		Id : "C" ,
+		Position :"3",
+		Total : BOXESONPAGE,
 		Head : "Hi",
 		SubHead :"Gophers unite",
 		Text : "This text doesn't have to be latin",
@@ -101,7 +125,7 @@ func InitAbout()(Page,About){
 		Title : "",
 		Heading : "About",
 		SubHeading : "The CheckIt Project",
-		Author :"",
+		Author : "",
 		Body: nil,
 	}
 
