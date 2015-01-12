@@ -117,22 +117,16 @@ function autocompile() {
 function compile(name , position) {
     var search = name.concat("edit");
     var prog = document.getElementById(search).value;
-    var pipe = document.getElementById(name.concat("pipe")).checked
     var req = new XMLHttpRequest();
     xmlreq = req;
     
     req.onreadystatechange = function(){compileUpdate(name);}
     position = "/".concat(position)
     nameCat = name.concat(position)
-    if(pipe){
-        req.open("POST", "http://localhost:8088/pipeile/".concat(nameCat), true);
-        req.setRequestHeader("Content-Type", "text/plain; charset=utf-8");
-        req.send(prog);
-     }else{
-        req.open("POST", "http://localhost:8088/compile/".concat(nameCat), true);
-        req.setRequestHeader("Content-Type", "text/plain; charset=utf-8");
-        req.send(prog);
-    } 
+    req.open("POST", "http://localhost:8088/compile/".concat(nameCat), true);
+    req.setRequestHeader("Content-Type", "text/plain; charset=utf-8");
+    req.send(prog);
+ 
 }
 
 function compileUpdate(boxId) {

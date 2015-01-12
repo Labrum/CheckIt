@@ -120,7 +120,6 @@ var boxText = `        <!-- Project One -->
                 <h4>{{.SubHead}}</h4>
                 <p>{{.Text}}</p>
                 <button class="btn btn-primary" id= "compile" onclick="compile('{{ print .Id |html}}','{{ print .Position |html}}');" > Run <span class ='glyphicon glyphicon-chevron-right'></span></button>
-                <input type="checkbox" id={{ print .Id |html}}pipe value="output">Pipe Output<br>
                 </div>
         </div>
         <div id = {{ print .Id |html}}errors class="alert hide alert-danger"><p></p></div>

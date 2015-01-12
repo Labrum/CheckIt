@@ -129,49 +129,7 @@ var shareOutput = template.Must(template.New("shareOutput").Parse(shareText))
 // Compile is an HTTP handler that reads Source code from the request,
 // runs the program (returning any errors),
 // and sends the program's output as the HTTP response.
-func cmpile(w http.ResponseWriter, req *http.Request) {
-
-	title := req.URL.Path[len("/compile/"):]
-	
-	
-	str := strings.Split(title, "/")
-	title = str[0]
-	fmt.Println(title)
-	body := new(bytes.Buffer)
-	position,_ := strconv.Atoi(str[1])
-
-	if _, err := body.ReadFrom(req.Body); err != nil {
-		return
-	}	
-
-	langName := Lang(boxes,title)
-
-	var lang = getLang(langName)
-//	p,_ := Compile("",title,nil,body.Bytes(), *lang)
-	
-//	fmt.Println(string(p))
-	out, err := Compile("",title,nil,body.Bytes(), *lang)
-
-	compOut := CompileOut{Out : out, Error : err, }
-
-	outputs[position-1] = &compOut
-
-	updateBody(boxes,title,body.String())
-	fmt.Println(string(out))
-	if err!= nil{
-		w.WriteHeader(404)
-		output.Execute(w,out)
-	}else if *htmlOutput {
-		w.Write(out)
-	} else {
-		output.Execute(w, out)
-	}
-}
-
-// Compile is an HTTP handler that reads Source code from the request,
-// runs the program (returning any errors),
-// and sends the program's output as the HTTP response.
-func pipeCompile(w http.ResponseWriter, req *http.Request) {
+func PipeCompile(w http.ResponseWriter, req *http.Request) {
 
 	title := req.URL.Path[len("/pipeile/"):]
 	
@@ -187,16 +145,30 @@ func pipeCompile(w http.ResponseWriter, req *http.Request) {
 		return
 	}	
 
-	langName := Lang(boxes,title)
 
 	fmt.Println(position)
+	var in []byte
+	if position == 1{
+		in = nil
+	}else{
+		in = outputs[position-2].Out		
+	}
 
+/*	If you want to use predefine languages, a language must be able to
+	run	in the format:
+
+	[Runner] [Filename]
+*/	
+	langName := Lang(boxes,title)
 	var lang = getLang(langName)
-//	p,_ := Compile("",title,outputs[position-2].Out,body.Bytes(), *lang)
+	out, err := Compile(title,in,body.Bytes(), *lang)
 
-//	fmt.Println(string(p))
-	out, err := Compile("",title,outputs[position-2].Out,body.Bytes(), *lang)
 
+/*  Run command takes input from the previous box and an array of strings
+	as commands
+
+	out, err := Run(in,title,body.Bytes(),strings.Fields(body.String()))
+*/
 	compOut := CompileOut{Out : out, Error : err, }
 
 	outputs[position-1] = &compOut
@@ -225,8 +197,7 @@ func main() {
 	http.HandleFunc("/about", AboutPage)
 	http.HandleFunc("/contact", ContactPage)
 	http.HandleFunc("/", FrontPage)
-	http.HandleFunc("/compile/", cmpile)
-	http.HandleFunc("/pipeile/",pipeCompile)
+	http.HandleFunc("/compile/", PipeCompile)
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
 	http.Handle("/fonts/", http.StripPrefix("/fonts/", http.FileServer(http.Dir("fonts"))))
 	http.Handle("/js/", http.StripPrefix("/js", http.FileServer(http.Dir("js"))))
