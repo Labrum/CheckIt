@@ -1,4 +1,0 @@
-total 12
-drwxrwxr-x  2 steven steven 4096 Jan 12 12:29 .
-drwxrwxr-x 10 steven steven 4096 Jan 12 12:29 ..
--rwxrwxr-x  1 steven steven    8 Jan 12 12:29 A.sh
