@@ -75,26 +75,6 @@ ls -l -a`,
 	return p,boxs
 }
 
-func InitContact()(Page,Contact){
-	p := Page{
-		Title : "",
-		Heading : "Contact",
-		SubHeading : "",
-		Author :"",
-		Body: nil,
-	}	
-	
-	con := Contact{
-		TelNum : "Tel : 076 111 1111",
-		Author :"Author : Steven Labrum",
-		Text : "CheckIt is for the demonstration, sharing and storing of code snippets",
-		Email : `Email : labrumsteven@gmail.com`,
-	}
-
-	return p,con
-}
-
-
 func InitAbout()(Page,About){
 	p := Page{
 		Title : "",

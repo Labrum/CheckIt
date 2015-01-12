@@ -34,13 +34,6 @@ type Page struct {
 	Body []byte
 }
 
-type Contact struct{
-	Author string
-	TelNum string
-	Email string
-	Text string
-}
-
 type About struct{
 	Text string
 	SecondaryText string

@@ -109,18 +109,6 @@ func AboutPage(w http.ResponseWriter, r *http.Request) {
 		
 }
 
-func ContactPage(w http.ResponseWriter, r *http.Request) {
-
-	p,con := InitContact()
-	
-	head.Execute(w,nil)
-	openBody.Execute(w,nil)
-	pageStart.Execute(w,p)
-	contact.Execute(w,con)
-	pageClose.Execute(w,nil)
-	htmlClose.Execute(w,nil)	
-}
-
 var outputText = `<pre>{{printf "%s" . |html}}</pre>`
 var output = template.Must(template.New("output").Parse(outputText)) 
 var shareText = `{{printf "%s" . |html}}`
@@ -195,7 +183,6 @@ func main() {
 	fmt.Println("cool beans")
 	http.HandleFunc("/share/", sharHandler)
 	http.HandleFunc("/about", AboutPage)
-	http.HandleFunc("/contact", ContactPage)
 	http.HandleFunc("/", FrontPage)
 	http.HandleFunc("/compile/", PipeCompile)
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))

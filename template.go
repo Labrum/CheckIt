@@ -83,9 +83,6 @@ var body = `<body>
                         <a href="/about">About</a>
                     </li>
                     <li>
-                        <a href="/contact">Contact</a>
-                    </li>
-                    <li>
                         <a  href="#" onclick="save();return false;">Share</a>
                     </li>
                     <li>

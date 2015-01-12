@@ -110,9 +110,9 @@ func randFolder() string{
 	Runs commands specified in args using input as Stdin
 */
 func Run(input []byte,title string,body []byte,args []string)( out []byte, err error){
+	
 	var buff bytes.Buffer
 	var cmd *exec.Cmd
-
 
 	tempDirectory = randFolder()
 
@@ -138,12 +138,14 @@ func Run(input []byte,title string,body []byte,args []string)( out []byte, err e
 
 	err = cmd.Run()	
 	out = buff.Bytes()
+	
 	if err!= nil{
 		fmt.Println(string(out))
 		return
 	}
 
 	defer os.RemoveAll("./"+tempDirectory)
+
 	return out, err	
 }
 
