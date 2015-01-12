@@ -23,7 +23,6 @@ var openBody = template.Must(template.New("openBody").Parse(body))
 var pageStart = template.Must(template.New("pageStart").Parse(pageStartText))
 var box = template.Must(template.New("box").Parse(boxText))
 var about = template.Must(template.New("about").Parse(aboutText))
-var contact = template.Must(template.New("contact").Parse(contactText))
 var pageClose = template.Must(template.New("pageClose").Parse(pageCloseText))
 var htmlClose =template.Must(template.New("htmlClose").Parse(htmlCloseText))
 
@@ -135,25 +134,8 @@ var aboutText = `        <!-- Project One -->
         </div>
         <!-- /.row -->`
 
-var contactText = `        <!-- Project One -->
-        <div id=Contact class="row">
-            <div class="col-md-7">
-                <h4>{{.Text}}</h4>
-            </div>
-            <div class="col-md-5">
-                <ul>
-                    <li><h3>{{.Author}}</h3></li>
-                    <li><h3>{{.TelNum}}</h3></li>
-                    <li><h3>{{.Email}}</h3></li>
-                </ul>
-            </div>
-        </div>
-        <!-- /.row -->`
-
 var pageCloseText =`
         
-        <hr>
-
         <!-- Footer -->
         <footer>
             <div class="row">
