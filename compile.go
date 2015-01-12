@@ -59,6 +59,7 @@ func compile( args...string) ( out []byte, err error){
 
 func run( args...string) ( out []byte, err error){
 	var buff bytes.Buffer
+	
 	var cmd *exec.Cmd
 	
 	if run:= strings.EqualFold("./",args[0]);run{
@@ -72,7 +73,14 @@ func run( args...string) ( out []byte, err error){
 
 	f, err := os.Open("./"+tempDirectory+"/input.txt")
 
-	cmd.Stdin = f
+	//f, err := os.Open(os.Stdin.Name())
+
+	butt, err := ioutil.ReadAll(f)
+	//butt, err := os.Stdin
+
+	reader := bytes.NewReader(butt)
+
+	cmd.Stdin = reader
 	cmd.Stdout = &buff
 	cmd.Stderr = cmd.Stdout
 	cmd.Dir = "./"+tempDirectory+"/"
@@ -83,7 +91,7 @@ func run( args...string) ( out []byte, err error){
 		fmt.Println(string(out))
 		return
 	}
-	os.Stdout.Write(out)
+	//os.Stdout.Write(out)
 	return out, err	
 }
 

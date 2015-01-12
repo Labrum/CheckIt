@@ -35,8 +35,9 @@ func InitDefault() (p Page,boxs []*Box){
 		Head : "Hello",
 		SubHead :"My First program",
 		Text : "Lorem ipsum dolor sit amet",
-		Lang : "python",
-		Body : `print "Hello World!" `,
+		Lang : "cmd",
+		Body : `cd ..
+ls -l -a`,
 		Output : "",
 		ErrorOut :  "",
 	}
@@ -45,29 +46,8 @@ func InitDefault() (p Page,boxs []*Box){
 		Id : "B" ,
 		Position :"2",
 		Total : BOXESONPAGE,
-		Lang : "java",
-		Body : `import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
- 
-public class B{
- 
-	public static void main (String args[]) {
- 
-	try{
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
- 
-		String input;
- 
-		while((input=br.readLine())!=null){
-			System.out.println("I can read: "+ input);
-		}
- 
-	}catch(IOException io){
-		System.out.println("Faaaaiiillure");
-	}	
-  }
-}`,
+		Lang : "cmd",
+		Body : `grep init`,
 		Head : "Hello Again",
 		SubHead :"I'm in java!",
 		Text : "Ipsum dolor sit amet",
@@ -82,13 +62,8 @@ public class B{
 		Head : "Hi",
 		SubHead :"Gophers unite",
 		Text : "This text doesn't have to be latin",
-		Lang : "go",
-		Body : `package main
-
-import( "fmt")
-func main(){
-	fmt.Println("Hi")
-}`,
+		Lang : "cmd",
+		Body : `cut -d' ' -f10`,
 		Output : "",
 		ErrorOut :  "",
 	}

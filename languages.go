@@ -33,6 +33,7 @@ func declareLanguages(){
 	languages["go"] = language{Compiler : "go build", Runner : "go run", RunWithExtension : true , Extension: ".go"}
 	languages["python"] = language{Compiler : "", Runner : "python",RunWithExtension : true , Extension: ".py"}
 	languages["java"] = language{Compiler : "javac", Runner : "java",RunWithExtension : false , Extension: ".java"}
+	languages["cmd"] = language{Compiler : "", Runner : "bash" ,RunWithExtension : true , Extension: ".sh"}
 }
 
 func getLang(name string) *language{
