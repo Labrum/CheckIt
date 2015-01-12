@@ -133,6 +133,10 @@ function autocompile() {
     compile();
 }
 
+function format(name, language){
+    
+}
+
 function compile(name , position) {
     var search = name.concat("edit");
     var prog = document.getElementById(search).value;

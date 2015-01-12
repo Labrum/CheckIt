@@ -115,6 +115,7 @@ var boxText = `        <!-- Project One -->
                 <h3>{{.Head}}</h3>
                 <h4>{{.SubHead}}</h4>
                 <p>{{.Text}}</p>
+                <button class="btn btn-primary" id= "format" onclick="format('{{ print .Id |html}}','{{ print .Lang |html}}');" > Format <span class ='glyphicon glyphicon-warning-sign'></span></button>
                 <button class="btn btn-primary" id= "compile" onclick="compile('{{ print .Id |html}}','{{ print .Position |html}}');" > Run <span class ='glyphicon glyphicon-chevron-right'></span></button>
                 </div>
         </div>

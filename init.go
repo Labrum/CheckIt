@@ -86,7 +86,7 @@ func InitAbout()(Page,About){
 
 	ab := About{
 		Text : "CheckIt is for the demonstration, sharing and storing of code snippets",
-		SecondaryText : "This is the secondary text",
+		SecondaryText : `<a href="http://www.google.com"> Google </a>`,
 	}
 
 	return p,ab
