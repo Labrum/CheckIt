@@ -18,7 +18,7 @@ package main
 
 var BOXESONPAGE = 3
 
-func InitDefault() (p Page, boxs []*Box) {
+func InitDefault() (p Page, boxs []*BoxStruct) {
 
 	p = Page{
 		Heading:    "Testing",
@@ -27,7 +27,7 @@ func InitDefault() (p Page, boxs []*Box) {
 		Body:       nil,
 	}
 
-	boxOne := Box{
+	boxOne := BoxStruct{
 		Id:       "A",
 		Position: "1",
 		Total:    BOXESONPAGE,
@@ -41,7 +41,7 @@ ls -l -a`,
 		ErrorOut: "",
 	}
 
-	boxTwo := Box{
+	boxTwo := BoxStruct{
 		Id:       "B",
 		Position: "2",
 		Total:    BOXESONPAGE,
@@ -54,7 +54,7 @@ ls -l -a`,
 		ErrorOut: "",
 	}
 
-	boxThree := Box{
+	boxThree := BoxStruct{
 		Id:       "C",
 		Position: "3",
 		Total:    BOXESONPAGE,
@@ -74,7 +74,7 @@ ls -l -a`,
 	return p, boxs
 }
 
-func InitAbout() (Page, About) {
+func InitAbout() (Page, AboutStruct) {
 	p := Page{
 		Heading:    "About",
 		SubHeading: "The CheckIt Project",
@@ -82,7 +82,7 @@ func InitAbout() (Page, About) {
 		Body:       nil,
 	}
 
-	ab := About{
+	ab := AboutStruct{
 		Text:          "CheckIt is for the demonstration, sharing and storing of code snippets",
 		SecondaryText: `<a href="http://www.google.com"> Google </a>`,
 	}

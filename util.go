@@ -33,12 +33,12 @@ type Page struct {
 	Body       []byte
 }
 
-type About struct {
+type AboutStruct struct {
 	Text          string
 	SecondaryText string
 }
 
-type Box struct {
+type BoxStruct struct {
 	Id       string
 	Position string
 	Total    int
@@ -51,13 +51,13 @@ type Box struct {
 	ErrorOut string
 }
 
-type Boxes []*Box
+type Boxes []*BoxStruct
 
 func (this Boxes) Len() int {
 	return len(this)
 }
 
-func Lang(this []*Box, name string) string {
+func Lang(this []*BoxStruct, name string) string {
 
 	for key := range this {
 		if strings.EqualFold(this[key].Id, name) {
@@ -67,7 +67,7 @@ func Lang(this []*Box, name string) string {
 	return ""
 }
 
-func updateBody(this []*Box, name string, bod string) {
+func updateBody(this []*BoxStruct, name string, bod string) {
 	for key := range this {
 		if strings.EqualFold(this[key].Id, name) {
 			this[key].Body = bod
@@ -75,7 +75,7 @@ func updateBody(this []*Box, name string, bod string) {
 	}
 }
 
-func printBoxes(this []*Box) {
+func printBoxes(this []*BoxStruct) {
 	for key := range this {
 		fmt.Print(this[key].Body)
 

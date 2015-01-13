@@ -64,13 +64,13 @@ func ReadPage(filename string) *Page {
 
 }
 
-func ReadBox(filename string) *Box {
+func ReadBox(filename string) *BoxStruct {
 
 	f, _ := os.Open(filename)
 
 	file, _ := ioutil.ReadAll(f)
 
-	b := Box{}
+	b := BoxStruct{}
 
 	if err := json.Unmarshal(file, &b); err != nil {
 		panic(err)

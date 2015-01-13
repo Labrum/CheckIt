@@ -28,7 +28,7 @@ import (
 )
 
 var outputs = [10]*CompileOut{}
-var boxes = []*Box{}
+var boxes = []*BoxStruct{}
 var page = Page{}
 
 var (
@@ -84,7 +84,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 			p := ReadPage(pageName)
 			pageStart.Execute(w, p)
 
-			boxes = []*Box{}
+			boxes = []*BoxStruct{}
 			for key := range boxNames {
 				boxP := ReadBox(boxNames[key])
 				boxes = append(boxes, boxP)
