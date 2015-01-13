@@ -23,8 +23,6 @@ func InitDefault() (p Page, boxs []*BoxStruct) {
 	p = Page{
 		Heading:    "Testing",
 		SubHeading: "this is a SubHeading",
-		Author:     "",
-		Body:       nil,
 	}
 
 	boxOne := BoxStruct{
@@ -37,8 +35,6 @@ func InitDefault() (p Page, boxs []*BoxStruct) {
 		Lang:     "cmd",
 		Body: `cd ..
 ls -l -a`,
-		Output:   "",
-		ErrorOut: "",
 	}
 
 	boxTwo := BoxStruct{
@@ -50,8 +46,6 @@ ls -l -a`,
 		Head:     "Hello Again",
 		SubHead:  "I'm in java!",
 		Text:     "Ipsum dolor sit amet",
-		Output:   "",
-		ErrorOut: "",
 	}
 
 	boxThree := BoxStruct{
@@ -63,8 +57,6 @@ ls -l -a`,
 		Text:     "This text doesn't have to be latin",
 		Lang:     "cmd",
 		Body:     `cut -d' ' -f10`,
-		Output:   "",
-		ErrorOut: "",
 	}
 
 	boxs = append(boxs, &boxOne)
@@ -78,8 +70,6 @@ func InitAbout() (Page, AboutStruct) {
 	p := Page{
 		Heading:    "About",
 		SubHeading: "The CheckIt Project",
-		Author:     "",
-		Body:       nil,
 	}
 
 	ab := AboutStruct{

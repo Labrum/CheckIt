@@ -29,7 +29,6 @@ func Share() string {
 
 	buff.WriteString(page.Heading)
 	buff.WriteString(page.SubHeading)
-	buff.WriteString(page.Author)
 
 	for key := range boxes {
 		buff.WriteString(boxes[key].Id)
@@ -38,8 +37,6 @@ func Share() string {
 		buff.WriteString(boxes[key].Text)
 		buff.WriteString(boxes[key].Lang)
 		buff.WriteString(boxes[key].Body)
-		buff.WriteString(boxes[key].Output)
-		buff.WriteString(boxes[key].ErrorOut)
 	}
 
 	hash := md5.Sum(buff.Bytes())

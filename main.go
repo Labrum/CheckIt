@@ -176,7 +176,7 @@ func sharHandler(w http.ResponseWriter, r *http.Request) {
 	shareOutput.Execute(w, out)
 }
 
-func main() {
+func Serve(config *Config, boxes ...Box) {
 	fmt.Println("cool beans")
 	http.HandleFunc("/share/", sharHandler)
 	http.HandleFunc("/about", AboutPage)
@@ -186,6 +186,10 @@ func main() {
 	http.Handle("/fonts/", http.StripPrefix("/fonts/", http.FileServer(http.Dir("fonts"))))
 	http.Handle("/js/", http.StripPrefix("/js", http.FileServer(http.Dir("js"))))
 	http.ListenAndServe(":8088", nil)
+}
+
+func main() {
+	Serve(nil, nil)
 }
 
 var helloWorld = []byte(`package main

@@ -21,16 +21,31 @@ import (
 	"strings"
 )
 
+type Box interface {
+	Help() string
+	Default() string
+	Syntax() string
+	Run(args ...string) ([]byte, error)
+}
+
 type CompileOut struct {
 	Out   []byte
 	Error error
 }
 
+type Config struct {
+	Path       string
+	Port       string
+	Timeout    string
+	About      string
+	AboutSide  string
+	Heading    string
+	SubHeading string
+}
+
 type Page struct {
 	Heading    string
 	SubHeading string
-	Author     string
-	Body       []byte
 }
 
 type AboutStruct struct {
@@ -47,8 +62,6 @@ type BoxStruct struct {
 	Text     string
 	Lang     string
 	Body     string
-	Output   string
-	ErrorOut string
 }
 
 type Boxes []*BoxStruct
@@ -78,9 +91,7 @@ func updateBody(this []*BoxStruct, name string, bod string) {
 func printBoxes(this []*BoxStruct) {
 	for key := range this {
 		fmt.Print(this[key].Body)
-
 	}
-
 }
 
 func (this Boxes) Swap(i, j int) {
