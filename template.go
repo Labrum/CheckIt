@@ -18,13 +18,13 @@ package main
 
 import "text/template"
 
-var head = template.Must(template.New("head").Parse(headStyle)) // HTML template
-var openBody = template.Must(template.New("openBody").Parse(body))
-var pageStart = template.Must(template.New("pageStart").Parse(pageStartText))
-var box = template.Must(template.New("box").Parse(boxText))
-var about = template.Must(template.New("about").Parse(aboutText))
-var pageClose = template.Must(template.New("pageClose").Parse(pageCloseText))
-var htmlClose = template.Must(template.New("htmlClose").Parse(htmlCloseText))
+var headTemp = template.Must(template.New("head").Parse(headStyle)) // HTML template
+var openBodyTemp = template.Must(template.New("openBody").Parse(body))
+var pageStartTemp = template.Must(template.New("pageStart").Parse(pageStartText))
+var boxTemp = template.Must(template.New("box").Parse(boxText))
+var aboutTemp = template.Must(template.New("about").Parse(aboutText))
+var pageCloseTemp = template.Must(template.New("pageClose").Parse(pageCloseText))
+var htmlCloseTemp = template.Must(template.New("htmlClose").Parse(htmlCloseText))
 
 var headStyle = `<!DOCTYPE html>
 <html lang="en">

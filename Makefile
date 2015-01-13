@@ -3,7 +3,7 @@ GORUN = $(GOCMD) run
 GOBUILD = $(GOCMD) build
 GOCLEAN = $(GOCMD) clean
 
-SOURCE = compile.go main.go languages.go template.go share.go util.go init.go
+SOURCE = main.go compile.go Server.go languages.go template.go share.go util.go init.go
 
 make: $(SOURCE)
 	$(GORUN) $(SOURCE)
