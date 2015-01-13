@@ -21,7 +21,6 @@ var BOXESONPAGE = 3
 func InitDefault() (p Page, boxs []*Box) {
 
 	p = Page{
-		Title:      "",
 		Heading:    "Testing",
 		SubHeading: "this is a SubHeading",
 		Author:     "",
@@ -77,7 +76,6 @@ ls -l -a`,
 
 func InitAbout() (Page, About) {
 	p := Page{
-		Title:      "",
 		Heading:    "About",
 		SubHeading: "The CheckIt Project",
 		Author:     "",

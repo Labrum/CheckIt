@@ -27,7 +27,6 @@ import (
 func Share() string {
 	var buff bytes.Buffer
 
-	buff.WriteString(page.Title)
 	buff.WriteString(page.Heading)
 	buff.WriteString(page.SubHeading)
 	buff.WriteString(page.Author)

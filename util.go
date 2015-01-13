@@ -27,7 +27,6 @@ type CompileOut struct {
 }
 
 type Page struct {
-	Title      string
 	Heading    string
 	SubHeading string
 	Author     string
