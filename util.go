@@ -25,7 +25,7 @@ type Box interface {
 	Help() string
 	Default() string
 	Syntax() string
-	Run(args ...string) ([]byte, error)
+	Run(input []byte, args ...string) ([]byte, error)
 }
 
 type CompileOut struct {

@@ -41,7 +41,7 @@ var (
 
 func baseCase(w http.ResponseWriter, r *http.Request) {
 
-	//_, boxes = InitDefault()
+	_, boxes = InitDefault()
 
 	headTemp.Execute(w, nil)
 	openBodyTemp.Execute(w, nil)
@@ -92,7 +92,6 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 				boxes = append(boxes, boxP)
 				boxTemp.Execute(w, boxP)
 			}
-
 			pageCloseTemp.Execute(w, nil)
 			htmlCloseTemp.Execute(w, nil)
 		}
@@ -193,8 +192,8 @@ func initBoxes(boxs ...Box) {
 	var box = BoxStruct{}
 
 	for key := range boxs {
-		box.Id = strconv.Itoa(key)
-		box.Position = strconv.Itoa(key + 1)
+		box.Id = string(key)
+		box.Position = string(key + 1)
 		box.Total = len(boxs)
 		box.Lang = boxs[key].Syntax()
 		box.Body = boxs[key].Default()
@@ -208,7 +207,7 @@ func initBoxes(boxs ...Box) {
 
 func Serve(config *Config, boxs ...Box) {
 	initConfig(config)
-	initBoxes(boxs...)
+	//initBoxes(boxs)
 
 	fmt.Println("cool beans")
 	http.HandleFunc("/share/", sharHandler)

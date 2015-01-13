@@ -116,18 +116,18 @@ func Run(input []byte, title string, body []byte, args []string) (out []byte, er
 
 	os.Mkdir("./"+tempDirectory, 0777)
 
-	fmt.Println(args)
+	//fmt.Println(args)
 
 	writefile("./"+tempDirectory+"/input", input, ".txt")
 	writefile("./"+tempDirectory+"/"+title, body, "")
-
-	cmd = exec.Command(args[0], args[1:]...)
 
 	f, err := os.Open("./" + tempDirectory + "/input.txt")
 
 	butt, err := ioutil.ReadAll(f)
 
 	reader := bytes.NewReader(butt)
+
+	cmd = exec.Command(args[0], args[1:]...)
 
 	cmd.Stdin = reader
 	cmd.Stdout = &buff

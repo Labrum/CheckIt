@@ -18,6 +18,24 @@ package main
 
 var BOXESONPAGE = 3
 
+type list struct{}
+
+func (l *list) Run(args ...string) (out []byte, err error) {
+	return nil, nil
+}
+
+func (l *list) Help() string {
+	return "This textbox uses the command line to list files"
+}
+
+func (l *list) Default() string {
+	return `ls -l -a`
+}
+
+func (l *list) Syntax() string {
+	return "cmd"
+}
+
 func InitDefault() (p Page, boxs []*BoxStruct) {
 
 	p = Page{
