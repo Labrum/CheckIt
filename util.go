@@ -21,34 +21,34 @@ import (
 	"strings"
 )
 
-type CompileOut struct{
-	Out []byte
+type CompileOut struct {
+	Out   []byte
 	Error error
 }
 
 type Page struct {
-	Title string
-	Heading string
+	Title      string
+	Heading    string
 	SubHeading string
-	Author string
-	Body []byte
+	Author     string
+	Body       []byte
 }
 
-type About struct{
-	Text string
+type About struct {
+	Text          string
 	SecondaryText string
 }
 
-type Box struct{
-	Id string
+type Box struct {
+	Id       string
 	Position string
-	Total int
-	Head string
-	SubHead string
-	Text string
-	Lang string
-	Body string
-	Output string
+	Total    int
+	Head     string
+	SubHead  string
+	Text     string
+	Lang     string
+	Body     string
+	Output   string
 	ErrorOut string
 }
 
@@ -58,28 +58,28 @@ func (this Boxes) Len() int {
 	return len(this)
 }
 
-func Lang(this []*Box,name string) string{
+func Lang(this []*Box, name string) string {
 
 	for key := range this {
-		if strings.EqualFold(this[key].Id,name){
+		if strings.EqualFold(this[key].Id, name) {
 			return this[key].Lang
 		}
 	}
 	return ""
 }
 
-func updateBody(this []*Box,name string, bod string ) {
+func updateBody(this []*Box, name string, bod string) {
 	for key := range this {
-		if strings.EqualFold(this[key].Id,name){
+		if strings.EqualFold(this[key].Id, name) {
 			this[key].Body = bod
 		}
 	}
 }
 
-func printBoxes(this []*Box){
+func printBoxes(this []*Box) {
 	for key := range this {
-		fmt.Print(this[key].Body);
-		
+		fmt.Print(this[key].Body)
+
 	}
 
 }

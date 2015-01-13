@@ -16,30 +16,30 @@ limitations under the License.
 
 package main
 
-import( 
-	//"fmt"
-	)
+import (
+//"fmt"
+)
 
-type language struct{
-	Compiler string
-	Runner string
+type language struct {
+	Compiler         string
+	Runner           string
 	RunWithExtension bool
-	Extension string
+	Extension        string
 }
 
 var languages map[string]language = make(map[string]language)
 
-func declareLanguages(){
-	languages["go"] = language{Compiler : "go build", Runner : "go run", RunWithExtension : true , Extension: ".go"}
-	languages["python"] = language{Compiler : "", Runner : "python",RunWithExtension : true , Extension: ".py"}
-	languages["java"] = language{Compiler : "javac", Runner : "java",RunWithExtension : false , Extension: ".java"}
-	languages["cmd"] = language{Compiler : "", Runner : "bash" ,RunWithExtension : true , Extension: ".sh"}
+func declareLanguages() {
+	languages["go"] = language{Compiler: "go build", Runner: "go run", RunWithExtension: true, Extension: ".go"}
+	languages["python"] = language{Compiler: "", Runner: "python", RunWithExtension: true, Extension: ".py"}
+	languages["java"] = language{Compiler: "javac", Runner: "java", RunWithExtension: false, Extension: ".java"}
+	languages["cmd"] = language{Compiler: "", Runner: "bash", RunWithExtension: true, Extension: ".sh"}
 }
 
-func getLang(name string) *language{
+func getLang(name string) *language {
 	declareLanguages()
 
-	if value, ok := languages[name]; ok{
+	if value, ok := languages[name]; ok {
 		return &value
 	}
 	return nil

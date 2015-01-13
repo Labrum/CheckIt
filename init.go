@@ -18,76 +18,76 @@ package main
 
 var BOXESONPAGE = 3
 
-func InitDefault() (p Page,boxs []*Box){
+func InitDefault() (p Page, boxs []*Box) {
 
 	p = Page{
-		Title : "",
-		Heading : "Testing",
-		SubHeading : "this is a SubHeading",
-		Author :"",
-		Body: nil,
-	}	
+		Title:      "",
+		Heading:    "Testing",
+		SubHeading: "this is a SubHeading",
+		Author:     "",
+		Body:       nil,
+	}
 
 	boxOne := Box{
-		Id : "A" ,
-		Position :"1",
-		Total : BOXESONPAGE,
-		Head : "Hello",
-		SubHead :"My First program",
-		Text : "Lorem ipsum dolor sit amet",
-		Lang : "cmd",
-		Body : `cd ..
+		Id:       "A",
+		Position: "1",
+		Total:    BOXESONPAGE,
+		Head:     "Hello",
+		SubHead:  "My First program",
+		Text:     "Lorem ipsum dolor sit amet",
+		Lang:     "cmd",
+		Body: `cd ..
 ls -l -a`,
-		Output : "",
-		ErrorOut :  "",
+		Output:   "",
+		ErrorOut: "",
 	}
 
 	boxTwo := Box{
-		Id : "B" ,
-		Position :"2",
-		Total : BOXESONPAGE,
-		Lang : "cmd",
-		Body : `grep init`,
-		Head : "Hello Again",
-		SubHead :"I'm in java!",
-		Text : "Ipsum dolor sit amet",
-		Output : "",
-		ErrorOut :  "",
+		Id:       "B",
+		Position: "2",
+		Total:    BOXESONPAGE,
+		Lang:     "cmd",
+		Body:     `grep init`,
+		Head:     "Hello Again",
+		SubHead:  "I'm in java!",
+		Text:     "Ipsum dolor sit amet",
+		Output:   "",
+		ErrorOut: "",
 	}
 
 	boxThree := Box{
-		Id : "C" ,
-		Position :"3",
-		Total : BOXESONPAGE,
-		Head : "Hi",
-		SubHead :"Gophers unite",
-		Text : "This text doesn't have to be latin",
-		Lang : "cmd",
-		Body : `cut -d' ' -f10`,
-		Output : "",
-		ErrorOut :  "",
+		Id:       "C",
+		Position: "3",
+		Total:    BOXESONPAGE,
+		Head:     "Hi",
+		SubHead:  "Gophers unite",
+		Text:     "This text doesn't have to be latin",
+		Lang:     "cmd",
+		Body:     `cut -d' ' -f10`,
+		Output:   "",
+		ErrorOut: "",
 	}
 
 	boxs = append(boxs, &boxOne)
 	boxs = append(boxs, &boxTwo)
-	boxs = append(boxs,&boxThree)
+	boxs = append(boxs, &boxThree)
 
-	return p,boxs
+	return p, boxs
 }
 
-func InitAbout()(Page,About){
+func InitAbout() (Page, About) {
 	p := Page{
-		Title : "",
-		Heading : "About",
-		SubHeading : "The CheckIt Project",
-		Author : "",
-		Body: nil,
+		Title:      "",
+		Heading:    "About",
+		SubHeading: "The CheckIt Project",
+		Author:     "",
+		Body:       nil,
 	}
 
 	ab := About{
-		Text : "CheckIt is for the demonstration, sharing and storing of code snippets",
-		SecondaryText : `<a href="http://www.google.com"> Google </a>`,
+		Text:          "CheckIt is for the demonstration, sharing and storing of code snippets",
+		SecondaryText: `<a href="http://www.google.com"> Google </a>`,
 	}
 
-	return p,ab
+	return p, ab
 }

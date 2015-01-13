@@ -15,13 +15,13 @@ limitations under the License.
 */
 package main
 
-import(
+import (
 	"bytes"
 	"crypto/md5"
-	"fmt"
-	"os"
-	"io/ioutil"	
 	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"os"
 )
 
 func Share() string {
@@ -40,70 +40,69 @@ func Share() string {
 		buff.WriteString(boxes[key].Lang)
 		buff.WriteString(boxes[key].Body)
 		buff.WriteString(boxes[key].Output)
-		buff.WriteString(boxes[key].ErrorOut)		
+		buff.WriteString(boxes[key].ErrorOut)
 	}
 
 	hash := md5.Sum(buff.Bytes())
 
-	return fmt.Sprintf("%x",hash)
+	return fmt.Sprintf("%x", hash)
 
 }
 
-func ReadPage(filename string) *Page{
+func ReadPage(filename string) *Page {
 
 	f, _ := os.Open(filename)
 
 	file, _ := ioutil.ReadAll(f)
-	
+
 	p := Page{}
 
 	if err := json.Unmarshal(file, &p); err != nil {
-        panic(err)
-    }
+		panic(err)
+	}
 
-    return &p
+	return &p
 
 }
 
-func ReadBox(filename string) *Box{
+func ReadBox(filename string) *Box {
 
 	f, _ := os.Open(filename)
 
 	file, _ := ioutil.ReadAll(f)
-	
+
 	b := Box{}
 
 	if err := json.Unmarshal(file, &b); err != nil {
-        panic(err)
-    }
+		panic(err)
+	}
 
-    return &b
+	return &b
 
 }
 
+func writeSave(dir string, filename string, body []byte, ext string) {
 
-func writeSave(dir string,filename string, body []byte, ext string){
-	
-	err := ioutil.WriteFile(dir+"/"+filename+ext, body,0777)
-	if(err!= nil){
+	err := ioutil.WriteFile(dir+"/"+filename+ext, body, 0777)
+	if err != nil {
 		return
 	}
 }
 
-func Save(folderName string){
+func Save(folderName string) {
 	var buff bytes.Buffer
-	os.Mkdir(folderName,0777)
+	os.Mkdir(folderName, 0777)
 
-	temp,_ := json.Marshal(page)
+	temp, _ := json.Marshal(page)
 	buff.WriteString(string(temp))
-	writeSave(folderName,"page",buff.Bytes(),".page")
+	writeSave(folderName, "page", buff.Bytes(), ".page")
 	buff.Reset()
 
 	for key := range boxes {
-		tmp,_ := json.Marshal(boxes[key])
+		tmp, _ := json.Marshal(boxes[key])
 		buff.WriteString(string(tmp))
-		writeSave(folderName,boxes[key].Id,buff.Bytes(),".box")
+		writeSave(folderName, boxes[key].Id, buff.Bytes(), ".box")
 		buff.Reset()
-	}	
+	}
 
 }

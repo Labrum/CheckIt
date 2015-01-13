@@ -24,7 +24,7 @@ var pageStart = template.Must(template.New("pageStart").Parse(pageStartText))
 var box = template.Must(template.New("box").Parse(boxText))
 var about = template.Must(template.New("about").Parse(aboutText))
 var pageClose = template.Must(template.New("pageClose").Parse(pageCloseText))
-var htmlClose =template.Must(template.New("htmlClose").Parse(htmlCloseText))
+var htmlClose = template.Must(template.New("htmlClose").Parse(htmlCloseText))
 
 var headStyle = `<!DOCTYPE html>
 <html lang="en">
@@ -134,7 +134,7 @@ var aboutText = `        <!-- Project One -->
         </div>
         <!-- /.row -->`
 
-var pageCloseText =`
+var pageCloseText = `
         
         <!-- Footer -->
         <footer>
