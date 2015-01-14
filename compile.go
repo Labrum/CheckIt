@@ -104,10 +104,19 @@ func randFolder() string {
 	return fmt.Sprintf("%x", hash)
 }
 
+func textAreas() []string {
+	var texts []string
+
+	for key := range boxes {
+		texts = append(texts, boxes[key].Body)
+	}
+	return texts
+}
+
 /*
 	Runs commands specified in args using input as Stdin
 */
-func InterfaceRun(box Box, input [10]*CompileOut, body []byte, args ...string) (out []byte, err error) {
+func InterfaceRun(box Box, body []byte, args ...string) (out []byte, err error) {
 
 	tempDirectory = randFolder()
 
@@ -115,8 +124,8 @@ func InterfaceRun(box Box, input [10]*CompileOut, body []byte, args ...string) (
 
 	writefile("./"+tempDirectory+"/"+args[0], body, "")
 	args = args[1:]
-
-	out, err = box.Run(input, body, tempDirectory, args...)
+	textareas := textAreas()
+	out, err = box.Run(textareas, tempDirectory, args...)
 
 	if err != nil {
 		fmt.Println(string(out))

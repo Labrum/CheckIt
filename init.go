@@ -27,13 +27,12 @@ var BOXESONPAGE = 3
 
 type list struct{}
 
-func (l *list) Run(input [10]*CompileOut, code []byte, directory string, args ...string) (out []byte, err error) {
+func (l *list) Run(TextAreas []string, directory string, args ...string) (out []byte, err error) {
 
 	var buff bytes.Buffer
 	var cmd *exec.Cmd
 
-	commands := bytes.NewBuffer(code)
-	args = strings.Fields(commands.String())
+	args = strings.Fields(TextAreas[0])
 
 	fmt.Println(args[0])
 	cmd = exec.Command(args[0], args[1:]...)
