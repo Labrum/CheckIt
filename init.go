@@ -16,12 +16,37 @@ limitations under the License.
 
 package main
 
+import (
+	"bytes"
+	"fmt"
+	"os/exec"
+	"strings"
+)
+
 var BOXESONPAGE = 3
 
 type list struct{}
 
-func (l *list) Run(args ...string) (out []byte, err error) {
-	return nil, nil
+func (l *list) Run(input [10]*CompileOut, code []byte, directory string, args ...string) (out []byte, err error) {
+
+	var buff bytes.Buffer
+	var cmd *exec.Cmd
+
+	commands := bytes.NewBuffer(code)
+	args = strings.Fields(commands.String())
+
+	fmt.Println(args[0])
+	cmd = exec.Command(args[0], args[1:]...)
+
+	cmd.Stdout = &buff
+	cmd.Stderr = cmd.Stdout
+	cmd.Dir = "./" + directory + "/"
+
+	//fmt.Print("./" + directory + "/")
+	err = cmd.Run()
+	out = buff.Bytes()
+
+	return out, err
 }
 
 func (l *list) Help() string {

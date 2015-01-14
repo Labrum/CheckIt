@@ -107,42 +107,23 @@ func randFolder() string {
 /*
 	Runs commands specified in args using input as Stdin
 */
-func Run(input []byte, title string, body []byte, args []string) (out []byte, err error) {
-
-	var buff bytes.Buffer
-	var cmd *exec.Cmd
+func InterfaceRun(box Box, input [10]*CompileOut, body []byte, args ...string) (out []byte, err error) {
 
 	tempDirectory = randFolder()
 
 	os.Mkdir("./"+tempDirectory, 0777)
 
-	//fmt.Println(args)
+	writefile("./"+tempDirectory+"/"+args[0], body, "")
+	args = args[1:]
 
-	writefile("./"+tempDirectory+"/input", input, ".txt")
-	writefile("./"+tempDirectory+"/"+title, body, "")
-
-	f, err := os.Open("./" + tempDirectory + "/input.txt")
-
-	butt, err := ioutil.ReadAll(f)
-
-	reader := bytes.NewReader(butt)
-
-	cmd = exec.Command(args[0], args[1:]...)
-
-	cmd.Stdin = reader
-	cmd.Stdout = &buff
-	cmd.Stderr = cmd.Stdout
-	cmd.Dir = "./" + tempDirectory + "/"
-
-	err = cmd.Run()
-	out = buff.Bytes()
+	out, err = box.Run(input, body, tempDirectory, args...)
 
 	if err != nil {
 		fmt.Println(string(out))
 		return
 	}
 
-	defer os.RemoveAll("./" + tempDirectory)
+	defer os.RemoveAll("./" + tempDirectory + "/")
 
 	return out, err
 }

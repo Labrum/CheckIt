@@ -29,6 +29,7 @@ import (
 
 var outputs = [10]*CompileOut{}
 var boxes = []*BoxStruct{}
+var interfaces = []Box{}
 var page = Page{}
 var aboutPage = Page{}
 var about = AboutStruct{}
@@ -136,27 +137,28 @@ func PipeCompile(w http.ResponseWriter, req *http.Request) {
 	}
 
 	fmt.Println(position)
-	var in []byte
+
+	/*var in []byte
 	if position == 1 {
 		in = nil
 	} else {
 		in = outputs[position-2].Out
 	}
-
-	/*	If you want to use predefine languages, a language must be able to
-		run	in the format:
-
-		[Runner] [Filename]
 	*/
-	langName := Lang(boxes, title)
-	var lang = getLang(langName)
-	out, err := Compile(title, in, body.Bytes(), *lang)
+	/*	If you want to use predefine languages, a language must be able to
+			run	in the format:
 
+			[Runner] [Filename]
+
+		langName := Lang(boxes, title)
+		var lang = getLang(langName)
+		out, err := Compile(title, in, body.Bytes(), *lang)
+	*/
 	/*  Run command takes input from the previous box and an array of strings
 	as commands
-
-	out, err := Run(in,title,body.Bytes(),strings.Fields(body.String()))
 	*/
+
+	out, err := InterfaceRun(interfaces[position-1], outputs, body.Bytes(), title)
 	compOut := CompileOut{Out: out, Error: err}
 
 	outputs[position-1] = &compOut
@@ -203,6 +205,7 @@ func initBoxes(boxs ...Box) {
 		box.Text = boxs[key].Help()
 
 		boxes = append(boxes, &box)
+		interfaces = append(interfaces, boxs[key])
 	}
 }
 
