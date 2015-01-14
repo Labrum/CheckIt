@@ -42,7 +42,6 @@ func (l *list) Run(input [10]*CompileOut, code []byte, directory string, args ..
 	cmd.Stderr = cmd.Stdout
 	cmd.Dir = "./" + directory + "/"
 
-	//fmt.Print("./" + directory + "/")
 	err = cmd.Run()
 	out = buff.Bytes()
 

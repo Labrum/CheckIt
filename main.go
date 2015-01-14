@@ -28,5 +28,5 @@ func main() {
 		About:      "CheckIt is for the demonstration, sharing and storing of code snippets",
 		AboutSide:  `<a href="http://www.google.com"> Google </a>`,
 	}
-	Serve(&con, &list{})
+	Serve(&con, &list{}, &list{}, &list{})
 }

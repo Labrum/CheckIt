@@ -192,9 +192,10 @@ func initConfig(config *Config) {
 
 func initBoxes(boxs ...Box) {
 
-	var box = BoxStruct{}
-
 	for key := range boxs {
+
+		var box = BoxStruct{}
+
 		box.Id = strconv.Itoa(key)
 		box.Position = strconv.Itoa(key + 1)
 		box.Total = len(boxs)
@@ -205,7 +206,9 @@ func initBoxes(boxs ...Box) {
 		box.Text = boxs[key].Help()
 
 		boxes = append(boxes, &box)
+
 		interfaces = append(interfaces, boxs[key])
+
 	}
 }
 
