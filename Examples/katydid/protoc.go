@@ -8,7 +8,7 @@ import (
 
 type protoc struct{}
 
-func (this *protoc) Run(path string, textboxes []string) ([]byte, error) {
+func (this *protoc) Run(path string, textboxes []string, args ...string) ([]byte, error) {
 	protoBufDef := textboxes[0]
 	filename := filepath.Join(path, "my.proto")
 	if err := ioutil.WriteFile(filename, protoBufDef, 0666); err != nil {

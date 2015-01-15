@@ -27,8 +27,8 @@ func dot(path, katydidStr string) ([]byte, error) {
 
 type katydid struct{}
 
-func (this *katydid) Run(path string, textboxes []string) ([]byte, error) {
-	popBuf, _, err := getPop(path, textboxes[0], textboxes[1]))
+func (this *katydid) Run(path string, textboxes []string, args ...string) ([]byte, error) {
+	popBuf, _, err := getPop(path, textboxes[0], textboxes[1])
 	if err != nil {
 		return nil, err
 	}

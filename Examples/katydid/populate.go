@@ -49,7 +49,7 @@ func getPop(path string, protoBufDef string, jsonStr string) ([]byte, string, er
 	return stdout, string(stderr), err
 }
 
-func (this *populate) Run(path string, textboxes []string) ([]byte, error) {
+func (this *populate) Run(path string, textboxes []string, args ...string) ([]byte, error) {
 	_, text, err := getPop(path, textboxes[0], string(textboxes[1]))
 	return []byte(text), err
 }
