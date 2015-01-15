@@ -24,7 +24,7 @@ func main() {
 	var con = CheckIt.Config{
 		Path:       "",
 		Port:       "",
-		Timeout:    "",
+		Timeout:    1000,
 		Heading:    "Testing",
 		SubHeading: "this is a SubHeading",
 		About:      "CheckIt is for the demonstration, sharing and storing of code snippets",
