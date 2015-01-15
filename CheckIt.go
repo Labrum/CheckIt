@@ -18,9 +18,11 @@ package CheckIt
 
 import (
 	"bytes"
+	"errors"
 	"flag"
 	"fmt"
 	"net/http"
+	"os/exec"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -55,6 +57,18 @@ func baseCase(w http.ResponseWriter, r *http.Request) {
 	pageCloseTemp.Execute(w, nil)
 	htmlCloseTemp.Execute(w, nil)
 
+}
+
+func CombinedRun(args ...string) (out []byte, err error) {
+	var buff bytes.Buffer
+
+	var cmd *exec.Cmd
+	cmd = exec.Command(args[0], args[1:]...)
+	cmd.Stdout = &buff
+	cmd.Stderr = cmd.Stdout
+	out, err = cmd.CombinedOutput()
+
+	return out, err
 }
 
 /*  FrontPage is an HTTP handler that displays the basecase
@@ -212,7 +226,7 @@ func initBoxes(boxs ...Box) {
 	}
 }
 
-func Serve(config *Config, boxs ...Box) {
+func Serve(config *Config, boxs ...Box) (err error) {
 	initConfig(config)
 	initBoxes(boxs...)
 
@@ -225,6 +239,10 @@ func Serve(config *Config, boxs ...Box) {
 	http.Handle("/fonts/", http.StripPrefix("/fonts/", http.FileServer(http.Dir("fonts"))))
 	http.Handle("/js/", http.StripPrefix("/js", http.FileServer(http.Dir("js"))))
 	http.ListenAndServe(":8088", nil)
+
+	err = errors.New("Server crashed")
+	return err
+
 }
 
 var helloWorld = []byte(`package main

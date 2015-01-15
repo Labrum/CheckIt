@@ -19,6 +19,7 @@ package CheckIt
 import (
 	"fmt"
 	"strings"
+	"time"
 )
 
 type Box interface {
@@ -36,7 +37,7 @@ type CompileOut struct {
 type Config struct {
 	Path       string
 	Port       string
-	Timeout    string
+	Timeout    time.Duration
 	About      string
 	AboutSide  string
 	Heading    string
