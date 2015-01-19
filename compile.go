@@ -65,10 +65,18 @@ func InterfaceRun(box Box, body []byte, args ...string) (out []byte, err error) 
 	args = args[1:]
 	textareas := textAreas()
 
-	killer := time.AfterFunc(configuration.Timeout, TimeOut)
+	killer := time.NewTimer(10000000)
+	var timer bool
 
-	out, err = box.Run(textareas, tempDirectory, args...)
-	timer := killer.Stop()
+	go func() {
+		killer = time.AfterFunc(configuration.Timeout, TimeOut)
+	}()
+
+	go func() {
+		out, err = box.Run(textareas, tempDirectory, args...)
+		timer = killer.Stop()
+	}()
+
 	if !timer {
 		out = []byte("TIME OUT")
 	}
