@@ -219,7 +219,6 @@ func Serve(config *Config, boxs ...Box) (err error) {
 
 	err = errors.New("Server crashed")
 	return err
-
 }
 
 var helloWorld = []byte(`package main

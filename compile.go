@@ -136,39 +136,3 @@ func InterfaceRun(box Box, body []byte, args ...string) (out []byte, err error) 
 
 	return out, err
 }
-
-func Compile(filename string, input []byte, body []byte, lang language) (out []byte, err error) {
-
-	tempDirectory = randFolder()
-
-	os.Mkdir("./"+tempDirectory, 0777)
-	writefile("./"+tempDirectory+"/"+filename, body, lang.Extension)
-
-	if noCompiler := strings.EqualFold("", lang.Compiler); !noCompiler {
-		out, err = compile(lang.Compiler, filename+lang.Extension)
-	}
-
-	if err != nil {
-		return
-	}
-
-	if lang.RunWithExtension {
-		if input != nil {
-			writefile("./"+tempDirectory+"/input", input, ".txt")
-			out, err = run(lang.Runner, filename+lang.Extension, "input.txt")
-		} else {
-			out, err = run(lang.Runner, filename+lang.Extension)
-		}
-	} else {
-		if input != nil {
-			writefile("./"+tempDirectory+"/input", input, ".txt")
-			out, err = run(lang.Runner, filename, "input.txt")
-		} else {
-			out, err = run(lang.Runner, filename)
-		}
-	}
-
-	defer os.RemoveAll("./" + tempDirectory)
-
-	return
-}
