@@ -22,7 +22,6 @@ import (
 	"flag"
 	"fmt"
 	"net/http"
-	"os/exec"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -55,18 +54,6 @@ func baseCase(w http.ResponseWriter, r *http.Request) {
 	pageCloseTemp.Execute(w, nil)
 	htmlCloseTemp.Execute(w, nil)
 
-}
-
-func CombinedRun(args ...string) (out []byte, err error) {
-
-	var cmd *exec.Cmd
-
-	cmd = exec.Command(args[0], args[1:]...)
-
-	cmd.Stderr = cmd.Stdout
-	out, err = cmd.CombinedOutput()
-
-	return out, err
 }
 
 /*  FrontPage is an HTTP handler that displays the basecase

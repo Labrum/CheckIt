@@ -18,6 +18,7 @@ package CheckIt
 
 import (
 	"fmt"
+	"os/exec"
 	"strings"
 	"time"
 )
@@ -97,4 +98,16 @@ func printBoxes(this []*BoxStruct) {
 
 func (this Boxes) Swap(i, j int) {
 	this[i], this[j] = this[j], this[i]
+}
+
+func CombinedRun(args ...string) (out []byte, err error) {
+
+	var cmd *exec.Cmd
+
+	cmd = exec.Command(args[0], args[1:]...)
+
+	cmd.Stderr = cmd.Stdout
+	out, err = cmd.CombinedOutput()
+
+	return out, err
 }
