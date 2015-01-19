@@ -77,7 +77,7 @@ func InterfaceRun(box Box, body []byte, args ...string) (out []byte, err error) 
 		timer = killer.Stop()
 	}()
 
-	if !timer {
+	if timer {
 		out = []byte("TIME OUT")
 	}
 	if err != nil {
