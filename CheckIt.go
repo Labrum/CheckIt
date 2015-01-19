@@ -44,8 +44,6 @@ var (
 
 func baseCase(w http.ResponseWriter, r *http.Request) {
 
-	//_, boxes = InitDefault()
-
 	headTemp.Execute(w, nil)
 	openBodyTemp.Execute(w, nil)
 	pageStartTemp.Execute(w, page)
@@ -115,7 +113,6 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func AboutPage(w http.ResponseWriter, r *http.Request) {
-	//aboutPage, about := InitAbout()
 
 	headTemp.Execute(w, nil)
 	openBodyTemp.Execute(w, nil)
@@ -152,32 +149,12 @@ func PipeCompile(w http.ResponseWriter, req *http.Request) {
 
 	fmt.Println(position)
 
-	/*var in []byte
-	if position == 1 {
-		in = nil
-	} else {
-		in = outputs[position-2].Out
-	}
-	*/
-	/*	If you want to use predefine languages, a language must be able to
-			run	in the format:
-
-			[Runner] [Filename]
-
-		langName := Lang(boxes, title)
-		var lang = getLang(langName)
-		out, err := Compile(title, in, body.Bytes(), *lang)
-	*/
-	/*  Run command takes input from the previous box and an array of strings
-	as commands
-	*/
+	updateBody(boxes, title, body.String())
 
 	out, err := InterfaceRun(interfaces[position-1], body.Bytes(), title)
 	compOut := CompileOut{Out: out, Error: err}
 
 	outputs[position-1] = &compOut
-
-	updateBody(boxes, title, body.String())
 
 	if err != nil {
 		w.WriteHeader(404)
