@@ -16,16 +16,15 @@ limitations under the License.
 package CheckIt
 
 import (
-	"bytes"
 	"crypto/md5"
 	"encoding/binary"
 	"fmt"
 	"io/ioutil"
 	"math/rand"
 	"os"
-	"os/exec"
-	"strings"
 )
+
+var tempDirectory = ""
 
 func writefile(filename string, body []byte, ext string) {
 
@@ -34,67 +33,6 @@ func writefile(filename string, body []byte, ext string) {
 		return
 	}
 }
-
-func compile(args ...string) (out []byte, err error) {
-
-	var buff bytes.Buffer
-	var cmd *exec.Cmd
-
-	compiler := strings.Fields(args[0])
-	compiler = append(compiler, args[1:]...)
-	cmd = exec.Command(compiler[0], compiler[1:]...)
-
-	cmd.Stdout = &buff
-	cmd.Stderr = cmd.Stdout
-	cmd.Dir = tempDirectory
-	err = cmd.Run()
-	out = buff.Bytes()
-	if err != nil {
-		fmt.Println(string(out))
-		return
-	}
-	return out, err
-}
-
-func run(args ...string) (out []byte, err error) {
-	var buff bytes.Buffer
-
-	var cmd *exec.Cmd
-
-	if run := strings.EqualFold("./", args[0]); run {
-		fmt.Println("./" + args[1])
-		cmd = exec.Command("./"+args[1], args[2:]...)
-	} else {
-		runner := strings.Fields(args[0])
-		runner = append(runner, args[1:]...)
-		cmd = exec.Command(runner[0], runner[1:]...)
-	}
-
-	f, err := os.Open("./" + tempDirectory + "/input.txt")
-
-	//f, err := os.Open(os.Stdin.Name())
-
-	butt, err := ioutil.ReadAll(f)
-	//butt, err := os.Stdin
-
-	reader := bytes.NewReader(butt)
-
-	cmd.Stdin = reader
-	cmd.Stdout = &buff
-	cmd.Stderr = cmd.Stdout
-	cmd.Dir = "./" + tempDirectory + "/"
-
-	err = cmd.Run()
-	out = buff.Bytes()
-	if err != nil {
-		fmt.Println(string(out))
-		return
-	}
-	//os.Stdout.Write(out)
-	return out, err
-}
-
-var tempDirectory = ""
 
 func randFolder() string {
 	b := make([]byte, 2)
