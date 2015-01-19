@@ -58,11 +58,11 @@ func baseCase(w http.ResponseWriter, r *http.Request) {
 }
 
 func CombinedRun(args ...string) (out []byte, err error) {
-	var buff bytes.Buffer
 
 	var cmd *exec.Cmd
+
 	cmd = exec.Command(args[0], args[1:]...)
-	cmd.Stdout = &buff
+
 	cmd.Stderr = cmd.Stdout
 	out, err = cmd.CombinedOutput()
 
