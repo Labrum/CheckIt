@@ -28,7 +28,7 @@ var BOXESONPAGE = 3
 
 type list struct{}
 
-func (l *list) Run(TextAreas []string, directory string, args ...string) (out []byte, err error) {
+func (l *list) Run(TextAreas []string, directory string) (out []byte, err error) {
 
 	var buff bytes.Buffer
 	var cmd *exec.Cmd
