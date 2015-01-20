@@ -65,21 +65,24 @@ func InterfaceRun(box Box, body []byte, args ...string) (out []byte, err error) 
 	args = args[1:]
 	textareas := textAreas()
 
-	killer := time.NewTimer(10000000)
-	var timer bool
-
+	timeout := make(chan bool, 1)
+	inTime := make(chan bool, 1)
 	go func() {
-		killer = time.AfterFunc(configuration.Timeout, TimeOut)
+		time.Sleep(1 * time.Second)
+		timeout <- true
 	}()
 
 	go func() {
 		out, err = box.Run(textareas, tempDirectory, args...)
-		timer = killer.Stop()
+		inTime <- true
 	}()
 
-	if timer {
-		out = []byte("TIME OUT")
+	select{
+	case<-timeout:
+		out = []byte("ERROR: Execution of code took too long.")
+	case<-inTime:
 	}
+	
 	if err != nil {
 		fmt.Println(string(out))
 		return
