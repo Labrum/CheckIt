@@ -22,8 +22,8 @@ import (
 
 func main() {
 	var con = CheckIt.Config{
-		Path:       "",
-		Port:       "8080",
+		Path:       "share",
+		Port:       "8088",
 		Timeout:    100,
 		Heading:    "Testing",
 		SubHeading: "this is a SubHeading",

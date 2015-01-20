@@ -66,7 +66,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		baseCase(w, r)
 	} else {
 		title := r.URL.Path[len("/"):]
-
+		title = configuration.Path + "/" + title
 		pageNames, _ := filepath.Glob(title + "/*.page")
 		boxNames, _ := filepath.Glob(title + "/*.box")
 
