@@ -69,7 +69,7 @@ func InterfaceRun(box Box, body []byte, args ...string) (out []byte, err error) 
 	inTime := make(chan bool, 1)
 
 	go func() {
-		time.Sleep(configuration.Timeout * time.Second)
+		time.Sleep(configuration.Timeout * time.Minute)
 		timeout <- true
 	}()
 
@@ -82,7 +82,9 @@ func InterfaceRun(box Box, body []byte, args ...string) (out []byte, err error) 
 	case <-inTime:
 
 	case <-timeout:
-		out = []byte("ERROR: Execution of code took too long.")
+		if out == nil {
+			out = []byte("ERROR: Execution of code took too long.")
+		}
 	}
 
 	if err != nil {
