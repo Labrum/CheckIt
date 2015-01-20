@@ -27,7 +27,7 @@ type Box interface {
 	Help() string
 	Default() string
 	Syntax() string
-	Run(TextAreas []string, directory string, args ...string) ([]byte, error)
+	Run(TextAreas []string, directory string) ([]byte, error)
 }
 
 type CompileOut struct {

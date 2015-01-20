@@ -55,7 +55,7 @@ func textAreas() []string {
 /*
 	Runs commands specified in args using input as Stdin
 */
-func InterfaceRun(box Box, body []byte, args ...string) (out []byte, err error) {
+func InterfaceRun(box Box, body []byte) (out []byte, err error) {
 
 	tempDirectory = randFolder()
 
@@ -75,7 +75,7 @@ func InterfaceRun(box Box, body []byte, args ...string) (out []byte, err error) 
 	}()
 
 	go func() {
-		out, err = box.Run(textareas, tempDirectory, args...)
+		out, err = box.Run(textareas, tempDirectory)
 		inTime <- true
 	}()
 
