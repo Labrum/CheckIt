@@ -79,9 +79,10 @@ func InterfaceRun(box Box, body []byte, args ...string) (out []byte, err error) 
 	}()
 
 	select {
+	case <-inTime:
+
 	case <-timeout:
 		out = []byte("ERROR: Execution of code took too long.")
-	case <-inTime:
 	}
 
 	if err != nil {
