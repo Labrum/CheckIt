@@ -33,7 +33,7 @@ func (l *list) Run(TextAreas []string, directory string) (out []byte, err error)
 	var buff bytes.Buffer
 	var cmd *exec.Cmd
 
-	args = strings.Fields(TextAreas[0])
+	args := strings.Fields(TextAreas[0])
 
 	fmt.Println(args[0])
 	cmd = exec.Command(args[0], args[1:]...)
