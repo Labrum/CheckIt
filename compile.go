@@ -55,14 +55,13 @@ func textAreas() []string {
 /*
 	Runs commands specified in args using input as Stdin
 */
-func InterfaceRun(box Box, body []byte) (out []byte, err error) {
+func InterfaceRun(box Box, body []byte, title string) (out []byte, err error) {
 
 	tempDirectory = randFolder()
 
 	os.Mkdir("./"+tempDirectory, 0777)
 
-	writefile("./"+tempDirectory+"/"+args[0], body, "")
-	args = args[1:]
+	writefile("./"+tempDirectory+"/"+title, body, "")
 	textareas := textAreas()
 
 	timeout := make(chan bool, 1)
