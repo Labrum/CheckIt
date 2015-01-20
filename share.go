@@ -85,19 +85,19 @@ func writeSave(dir string, filename string, body []byte, ext string) {
 	}
 }
 
-func Save(folderName string) {
+func Save(path string, folderName string) {
 	var buff bytes.Buffer
-	os.Mkdir(folderName, 0777)
+	os.Mkdir(path+"/"+folderName, 0777)
 
 	temp, _ := json.Marshal(page)
 	buff.WriteString(string(temp))
-	writeSave(folderName, "page", buff.Bytes(), ".page")
+	writeSave(path+"/"+folderName, "page", buff.Bytes(), ".page")
 	buff.Reset()
 
 	for key := range boxes {
 		tmp, _ := json.Marshal(boxes[key])
 		buff.WriteString(string(tmp))
-		writeSave(folderName, boxes[key].Id, buff.Bytes(), ".box")
+		writeSave(path+"/"+folderName, boxes[key].Id, buff.Bytes(), ".box")
 		buff.Reset()
 	}
 

@@ -19,7 +19,6 @@ package main
 import (
 	"bytes"
 	"fmt"
-	//"github.com/Labrum/CheckIt"
 	"os/exec"
 	"strings"
 )

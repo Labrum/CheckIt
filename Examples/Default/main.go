@@ -23,7 +23,7 @@ import (
 func main() {
 	var con = CheckIt.Config{
 		Path:       "",
-		Port:       "",
+		Port:       "8080",
 		Timeout:    100,
 		Heading:    "Testing",
 		SubHeading: "this is a SubHeading",

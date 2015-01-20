@@ -83,12 +83,12 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 			headTemp.Execute(w, nil)
 			openBodyTemp.Execute(w, nil)
 
-			p := ReadPage(pageName)
+			p := ReadPage(configuration.Path + "/" + pageName)
 			pageStartTemp.Execute(w, p)
 
 			boxes = []*BoxStruct{}
 			for key := range boxNames {
-				boxP := ReadBox(boxNames[key])
+				boxP := ReadBox(configuration.Path + "/" + boxNames[key])
 				boxes = append(boxes, boxP)
 				boxTemp.Execute(w, boxP)
 			}
@@ -155,7 +155,7 @@ func PipeCompile(w http.ResponseWriter, req *http.Request) {
 
 func sharHandler(w http.ResponseWriter, r *http.Request) {
 	out := Share()
-	Save(out)
+	Save(configuration.Path, out)
 	shareOutput.Execute(w, out)
 }
 
@@ -180,8 +180,8 @@ func initBoxes(boxs ...Box) {
 		box.Total = len(boxs)
 		box.Lang = boxs[key].Syntax()
 		box.Body = boxs[key].Default()
-		box.Head = "heading"
-		box.SubHead = "subhead"
+		box.Head = "Heading"
+		box.SubHead = "Subhead"
 		box.Text = boxs[key].Help()
 
 		boxes = append(boxes, &box)
@@ -203,7 +203,7 @@ func Serve(config *Config, boxs ...Box) (err error) {
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
 	http.Handle("/fonts/", http.StripPrefix("/fonts/", http.FileServer(http.Dir("fonts"))))
 	http.Handle("/js/", http.StripPrefix("/js", http.FileServer(http.Dir("js"))))
-	http.ListenAndServe(":8088", nil)
+	http.ListenAndServe(":"+configuration.Port, nil)
 
 	err = errors.New("Server crashed")
 	return err
