@@ -66,7 +66,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		baseCase(w, r)
 	} else {
 		title := r.URL.Path[len("/"):]
-		title = configuration.Path + "/" + title
+		title = configuration.Path + title
 		pageNames, _ := filepath.Glob(title + "/*.page")
 		boxNames, _ := filepath.Glob(title + "/*.box")
 
@@ -83,12 +83,12 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 			headTemp.Execute(w, nil)
 			openBodyTemp.Execute(w, nil)
 
-			p := ReadPage(configuration.Path + "/" + pageName)
+			p := ReadPage(configuration.Path + pageName)
 			pageStartTemp.Execute(w, p)
 
 			boxes = []*BoxStruct{}
 			for key := range boxNames {
-				boxP := ReadBox(configuration.Path + "/" + boxNames[key])
+				boxP := ReadBox(configuration.Path + boxNames[key])
 				boxes = append(boxes, boxP)
 				boxTemp.Execute(w, boxP)
 			}
