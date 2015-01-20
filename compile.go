@@ -70,7 +70,7 @@ func InterfaceRun(box Box, body []byte, args ...string) (out []byte, err error) 
 
 	go func() {
 		fmt.Print(configuration.Timeout)
-		time.Sleep(configuration.Timeout * time.Minute)
+		time.Sleep(configuration.Timeout * time.Second)
 		timeout <- true
 	}()
 

@@ -34,7 +34,7 @@ var interfaces = []Box{}
 var page = Page{}
 var aboutPage = Page{}
 var about = AboutStruct{}
-var configuration = Config{}
+var configuration = &Config{}
 
 var (
 	httpListen = flag.String("http", "127.0.0.1:3999", "host:port to listen on")
@@ -160,6 +160,7 @@ func sharHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func initConfig(config *Config) {
+	configuration = config
 	page.Heading = config.Heading
 	page.SubHeading = config.SubHeading
 	about.Text = config.About
