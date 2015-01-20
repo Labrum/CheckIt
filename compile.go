@@ -69,6 +69,7 @@ func InterfaceRun(box Box, body []byte, args ...string) (out []byte, err error) 
 	inTime := make(chan bool, 1)
 
 	go func() {
+		fmt.Print(configuration.Timeout)
 		time.Sleep(configuration.Timeout * time.Minute)
 		timeout <- true
 	}()
