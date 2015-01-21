@@ -42,10 +42,10 @@ var headStyle = `<!DOCTYPE html>
     <title>CheckIt</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="http://localhost:8088/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link href="http://localhost:8088/css/1-col-portfolio.css" rel="stylesheet">
+    <link href="/css/1-col-portfolio.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
