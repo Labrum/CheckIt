@@ -45,19 +45,19 @@ func Share() string {
 
 }
 
-func ReadPage(filename string) *Page {
+func ReadPage(filename string) *Config {
 
 	f, _ := os.Open(filename)
 
 	file, _ := ioutil.ReadAll(f)
 
-	p := Page{}
+	c := Config{}
 
-	if err := json.Unmarshal(file, &p); err != nil {
+	if err := json.Unmarshal(file, &c); err != nil {
 		panic(err)
 	}
 
-	return &p
+	return &c
 
 }
 
@@ -89,9 +89,9 @@ func Save(path string, folderName string) {
 	var buff bytes.Buffer
 	os.Mkdir(path+folderName, 0777)
 
-	temp, _ := json.Marshal(page)
+	temp, _ := json.Marshal(configuration)
 	buff.WriteString(string(temp))
-	writeSave(path+folderName, "page", buff.Bytes(), ".page")
+	writeSave(path+folderName, "conf", buff.Bytes(), ".config")
 	buff.Reset()
 
 	for key := range boxes {
