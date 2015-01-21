@@ -71,7 +71,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		boxNames, _ := filepath.Glob(title + "/*.box")
 
 		fmt.Println(len(pageNames))
-		fmt.Println("hello")
+		fmt.Println("Loaded shared page")
 
 		if pageNames == nil || boxNames == nil {
 			http.Redirect(w, r, "/", http.StatusFound)
