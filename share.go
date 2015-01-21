@@ -45,7 +45,7 @@ func Share() string {
 
 }
 
-func ReadPage(filename string) *Config {
+func ReadConfig(filename string) *Config {
 
 	f, _ := os.Open(filename)
 

@@ -83,7 +83,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 			headTemp.Execute(w, nil)
 			openBodyTemp.Execute(w, nil)
 
-			configuration = ReadPage(configuration.Path + pageName)
+			configuration = ReadConfig(configuration.Path + pageName)
 
 			initConfig(configuration)
 
