@@ -1,4 +1,4 @@
-/*
+l/*
 Copyright 2015 Steven Labrum
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -205,9 +205,6 @@ func Serve(config *Config, boxs ...Box) (err error) {
 	http.HandleFunc("/about", AboutPage)
 	http.HandleFunc("/", FrontPage)
 	http.HandleFunc("/compile/", PipeCompile)
-	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
-	http.Handle("/fonts/", http.StripPrefix("/fonts/", http.FileServer(http.Dir("fonts"))))
-	http.Handle("/js/", http.StripPrefix("/js", http.FileServer(http.Dir("js"))))
 	http.ListenAndServe(":"+configuration.Port, nil)
 
 	err = errors.New("Server crashed")
