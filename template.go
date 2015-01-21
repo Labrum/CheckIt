@@ -42,7 +42,7 @@ var headStyle = `<!DOCTYPE html>
     <title>CheckIt</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         /*!
          * Start Bootstrap - 1 Col Portfolio HTML Template (http://startbootstrap.com)
@@ -163,9 +163,8 @@ var htmlCloseText = `    <!-- jQuery -->
     <script src="js/jquery.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/index.js"></script>
-
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+   
 </body>
 
 </html>
