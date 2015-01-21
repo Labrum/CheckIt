@@ -68,7 +68,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		title := r.URL.Path[len("/"):]
 		title = configuration.Path + "/" + title
 		fmt.Println(title)
-		pageNames, _ := filepath.Glob(title + "/*.page")
+		pageNames, _ := filepath.Glob(title + "/*.config")
 		boxNames, _ := filepath.Glob(title + "/*.box")
 
 		fmt.Println(len(pageNames))
