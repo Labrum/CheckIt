@@ -43,10 +43,21 @@ var headStyle = `<!DOCTYPE html>
 
     <!-- Bootstrap Core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /*!
+         * Start Bootstrap - 1 Col Portfolio HTML Template (http://startbootstrap.com)
+         * Code licensed under the Apache License v2.0.
+         * For details, see http://www.apache.org/licenses/LICENSE-2.0.
+         */
 
-    <!-- Custom CSS -->
-    <link href="/css/1-col-portfolio.css" rel="stylesheet">
+        body {
+            padding-top: 70px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+        }
 
+        footer {
+            margin: 50px 0;
+        }
+    </style>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
