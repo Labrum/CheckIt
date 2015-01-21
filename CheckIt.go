@@ -208,7 +208,7 @@ func Serve(config *Config, boxs ...Box) (err error) {
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
 	http.Handle("/fonts/", http.StripPrefix("/fonts/", http.FileServer(http.Dir("fonts"))))
 	http.Handle("/js/", http.StripPrefix("/js", http.FileServer(http.Dir("js"))))
-	http.ListenAndServe(":"+configuration.Port, nil)
+	http.ListenAndServe("0.0.0.0:"+configuration.Port, nil)
 
 	err = errors.New("Server crashed")
 	return err
