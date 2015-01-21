@@ -84,7 +84,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 			headTemp.Execute(w, nil)
 			openBodyTemp.Execute(w, nil)
 
-			configuration = ReadConfig(configuration.Path + pageName)
+			configuration = ReadConfig(pageName)
 
 			initConfig(configuration)
 
@@ -92,7 +92,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 
 			boxes = []*BoxStruct{}
 			for key := range boxNames {
-				boxP := ReadBox(configuration.Path + boxNames[key])
+				boxP := ReadBox(boxNames[key])
 				boxes = append(boxes, boxP)
 				boxTemp.Execute(w, boxP)
 			}
