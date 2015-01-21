@@ -111,7 +111,7 @@ function save() {
     var req1 = new XMLHttpRequest();
     xmlreq = req1;
     req1.onreadystatechange = function(){share();}
-    req1.open("POST", "http://localhost:8088/share/", true);
+    req1.open("POST", window.location.origin+"/share/", true);
     req1.setRequestHeader("Content-Type", "text/plain; charset=utf-8");
     req1.send("");
 }
@@ -142,7 +142,7 @@ function compile(name , position) {
     req.onreadystatechange = function(){compileUpdate(name);}
     position = "/".concat(position)
     nameCat = name.concat(position)
-    req.open("POST", "http://localhost:8088/compile/".concat(nameCat), true);
+    req.open("POST", window.location.origin+ "/compile/".concat(nameCat), true);
     req.setRequestHeader("Content-Type", "text/plain; charset=utf-8");
     req.send(prog);
  
