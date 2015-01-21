@@ -67,8 +67,9 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 	} else {
 		title := r.URL.Path[len("/"):]
 		title = configuration.Path + "/" + title
-		pageNames, _ := filepath.Glob(configuration.Path + "/" + title + "/*.page")
-		boxNames, _ := filepath.Glob(configuration.Path + "/" + title + "/*.box")
+		fmt.Println(title)
+		pageNames, _ := filepath.Glob(title + "/*.page")
+		boxNames, _ := filepath.Glob(title + "/*.box")
 
 		fmt.Println(len(pageNames))
 		fmt.Println("Loaded shared page")
