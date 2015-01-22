@@ -61,8 +61,6 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 
 	page, _ := initConfig(configuration)
 
-	boxes := initBoxes(interfaces)
-
 	if len(title) < 1 {
 		baseCase(w, r, page)
 	} else {
@@ -91,7 +89,8 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 
 			pageStartTemp.Execute(w, page)
 
-			boxes = []*BoxStruct{}
+			var boxes = []*BoxStruct{}
+
 			for key := range boxNames {
 				boxP := ReadBox(boxNames[key])
 				boxes = append(boxes, boxP)
