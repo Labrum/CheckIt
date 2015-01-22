@@ -30,11 +30,6 @@ type Box interface {
 	Run(TextAreas []string, directory string) ([]byte, error)
 }
 
-type CompileOut struct {
-	Out   []byte
-	Error error
-}
-
 type Config struct {
 	Path       string
 	Port       string

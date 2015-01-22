@@ -28,7 +28,6 @@ import (
 	"text/template"
 )
 
-var outputs = [10]*CompileOut{}
 var boxes = []*BoxStruct{}
 var interfaces = []Box{}
 var page = Page{}
@@ -71,7 +70,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		pageNames, _ := filepath.Glob(title + "/*.config")
 		boxNames, _ := filepath.Glob(title + "/*.box")
 
-		fmt.Println(len(pageNames))
+		fmt.Println(len(pageNames)) 
 		fmt.Println("Loaded shared page")
 
 		if pageNames == nil || boxNames == nil {
@@ -143,9 +142,6 @@ func PipeCompile(w http.ResponseWriter, req *http.Request) {
 	updateBody(boxes, title, body.String())
 
 	out, err := InterfaceRun(interfaces[position-1], body.Bytes(), title)
-	compOut := CompileOut{Out: out, Error: err}
-
-	outputs[position-1] = &compOut
 
 	if err != nil {
 		w.WriteHeader(404)
