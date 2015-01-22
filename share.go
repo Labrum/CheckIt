@@ -24,7 +24,7 @@ import (
 	"os"
 )
 
-func Share(page Page, boxes []*BoxStruct) string {
+func Share(page Page) string {
 	var buff bytes.Buffer
 
 	buff.WriteString(page.Heading)
@@ -85,7 +85,7 @@ func writeSave(dir string, filename string, body []byte, ext string) {
 	}
 }
 
-func Save(path string, folderName string, boxes []*BoxStruct) {
+func Save(path string, folderName string) {
 	var buff bytes.Buffer
 	os.Mkdir(path+folderName, 0777)
 

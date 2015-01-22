@@ -159,10 +159,9 @@ func PipeCompile(w http.ResponseWriter, req *http.Request) {
 
 func sharHandler(w http.ResponseWriter, r *http.Request) {
 	page, _ := initConfig(configuration)
-	boxes := initBoxes(interfaces)
-	out := Share(page, boxes)
+	out := Share(page)
 	fmt.Println("PATH :/ " + configuration.Path)
-	Save(configuration.Path+"/", out, boxes)
+	Save(configuration.Path+"/", out)
 	shareOutput.Execute(w, out)
 }
 
