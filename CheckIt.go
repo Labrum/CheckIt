@@ -26,6 +26,8 @@ import (
 	"strconv"
 	"strings"
 	"text/template"
+	"encoding/json"
+	"sync"
 )
 
 var interfaces = []Box{}
@@ -141,11 +143,17 @@ func PipeCompile(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	var textboxes []string
+
+	if err := json.Unmarshal(body.Bytes(), &textboxes); err != nil {
+		panic(err)
+	}
+
 	fmt.Println(position)
 
-	updateBody(boxes, title, body.String())
+	updateBody(boxes, textboxes)
 
-	out, err := InterfaceRun(interfaces[position-1], boxes, body.Bytes(), title)
+	out, err := InterfaceRun(interfaces[position-1], textboxes, title)
 
 	if err != nil {
 		w.WriteHeader(404)
@@ -157,11 +165,32 @@ func PipeCompile(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func sharHandler(w http.ResponseWriter, r *http.Request) {
+func sharHandler(w http.ResponseWriter, req *http.Request) {
+
+	body := new(bytes.Buffer)
+
+	if _, err := body.ReadFrom(req.Body); err != nil {
+		return
+	}
+
+	var textboxes []string
+
+	if err := json.Unmarshal(body.Bytes(), &textboxes); err != nil {
+		panic(err)
+	}
+
+
+
 	page, _ := initConfig(configuration)
+
 	out := Share(page)
 	fmt.Println("PATH :/ " + configuration.Path)
+
+	mux :=  &sync.Mutex{}
+	mux.Lock()
+	updateBody(boxes, textboxes)	
 	Save(configuration.Path+"/", out)
+	mux.Unlock()
 	shareOutput.Execute(w, out)
 }
 

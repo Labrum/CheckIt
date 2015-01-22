@@ -77,11 +77,9 @@ func Lang(this []*BoxStruct, name string) string {
 	return ""
 }
 
-func updateBody(this []*BoxStruct, name string, bod string) {
+func updateBody(this []*BoxStruct, text []string) {
 	for key := range this {
-		if strings.EqualFold(this[key].Id, name) {
-			this[key].Body = bod
-		}
+			this[key].Body = text[key]
 	}
 }
 

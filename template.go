@@ -253,12 +253,22 @@ var htmlCloseText = `    <!-- jQuery -->
     function save() {
         console.log("share button clicked");
         
+        var test = document.getElementsByClassName("codeBody");
+
+        var texts = []
+
+        for (var key in test) {
+            texts.push(test[key].value);
+        }
+
+
         var req1 = new XMLHttpRequest();
         xmlreq = req1;
         req1.onreadystatechange = function(){share();}
         req1.open("POST", window.location.origin+"/share/", true);
         req1.setRequestHeader("Content-Type", "text/plain; charset=utf-8");
-        req1.send("");
+        var myJsonString = JSON.stringify(texts);
+        req1.send(myJsonString);
     }
 
     function share(){
@@ -281,6 +291,14 @@ var htmlCloseText = `    <!-- jQuery -->
     function compile(name , position) {
         var search = name.concat("edit");
         var prog = document.getElementById(search).value;
+        var test = document.getElementsByClassName("codeBody");
+
+        var texts = []
+
+        for (var key in test) {
+            texts.push(test[key].value);
+        }
+
         var req = new XMLHttpRequest();
         xmlreq = req;
         
@@ -289,7 +307,10 @@ var htmlCloseText = `    <!-- jQuery -->
         nameCat = name.concat(position)
         req.open("POST", window.location.origin+ "/compile/".concat(nameCat), true);
         req.setRequestHeader("Content-Type", "text/plain; charset=utf-8");
-        req.send(prog);
+
+
+        var myJsonString = JSON.stringify(texts);
+        req.send(myJsonString);
      
     }
 
