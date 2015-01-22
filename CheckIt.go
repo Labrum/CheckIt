@@ -30,6 +30,7 @@ import (
 
 var interfaces = []Box{}
 var configuration = &Config{}
+var boxes = []*BoxStruct{}
 
 var (
 	httpListen = flag.String("http", "127.0.0.1:3999", "host:port to listen on")
@@ -42,7 +43,7 @@ func baseCase(w http.ResponseWriter, r *http.Request, page Page) {
 	openBodyTemp.Execute(w, nil)
 	pageStartTemp.Execute(w, page)
 
-	boxes := initBoxes(interfaces)
+	boxes = initBoxes(interfaces)
 
 	for key := range boxes {
 		boxTemp.Execute(w, boxes[key])
@@ -89,8 +90,6 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 
 			pageStartTemp.Execute(w, page)
 
-			var boxes = []*BoxStruct{}
-
 			for key := range boxNames {
 				boxP := ReadBox(boxNames[key])
 				boxes = append(boxes, boxP)
@@ -129,8 +128,6 @@ var shareOutput = template.Must(template.New("shareOutput").Parse(shareText))
 func PipeCompile(w http.ResponseWriter, req *http.Request) {
 
 	title := req.URL.Path[len("/pipeile/"):]
-
-	boxes := initBoxes(interfaces)
 
 	fmt.Println(title)
 	str := strings.Split(title, "/")
