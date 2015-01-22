@@ -135,7 +135,7 @@ function autocompile() {
 
 function compile(name , position) {
     var search = name.concat("edit");
-    var prog = document.getElementById(search).value;
+    var prog = document.getElementsByClassName();
     var req = new XMLHttpRequest();
     xmlreq = req;
     
@@ -145,7 +145,6 @@ function compile(name , position) {
     req.open("POST", window.location.origin+ "/compile/".concat(nameCat), true);
     req.setRequestHeader("Content-Type", "text/plain; charset=utf-8");
     req.send(prog);
- 
 }
 
 function compileUpdate(boxId) {
