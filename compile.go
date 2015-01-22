@@ -43,7 +43,7 @@ func randFolder() string {
 	return fmt.Sprintf("%x", hash)
 }
 
-func textAreas() []string {
+func textAreas(boxes []*BoxStruct) []string {
 	var texts []string
 
 	for key := range boxes {
@@ -55,14 +55,14 @@ func textAreas() []string {
 /*
 	Runs commands specified in args using input as Stdin
 */
-func InterfaceRun(box Box, body []byte, title string) (out []byte, err error) {
+func InterfaceRun(box Box, boxes []*BoxStruct, body []byte, title string) (out []byte, err error) {
 
 	tempDirectory = randFolder()
 
 	os.Mkdir("./"+tempDirectory, 0777)
 
 	writefile("./"+tempDirectory+"/"+title, body, "")
-	textareas := textAreas()
+	textareas := textAreas(boxes)
 
 	timeout := make(chan bool, 1)
 	inTime := make(chan bool, 1)

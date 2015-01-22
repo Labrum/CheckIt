@@ -28,11 +28,7 @@ import (
 	"text/template"
 )
 
-var boxes = []*BoxStruct{}
 var interfaces = []Box{}
-var page = Page{}
-var aboutPage = Page{}
-var about = AboutStruct{}
 var configuration = &Config{}
 
 var (
@@ -40,11 +36,13 @@ var (
 	htmlOutput = flag.Bool("html", false, "render program output as HTML")
 )
 
-func baseCase(w http.ResponseWriter, r *http.Request) {
+func baseCase(w http.ResponseWriter, r *http.Request, page Page) {
 
 	headTemp.Execute(w, nil)
 	openBodyTemp.Execute(w, nil)
 	pageStartTemp.Execute(w, page)
+
+	boxes := initBoxes(interfaces)
 
 	for key := range boxes {
 		boxTemp.Execute(w, boxes[key])
@@ -61,8 +59,12 @@ unless a stored page is being loaded.
 func FrontPage(w http.ResponseWriter, r *http.Request) {
 	title := r.URL.Path[len("/"):]
 
+	page, _ := initConfig(configuration)
+
+	boxes := initBoxes(interfaces)
+
 	if len(title) < 1 {
-		baseCase(w, r)
+		baseCase(w, r, page)
 	} else {
 		title := r.URL.Path[len("/"):]
 		title = configuration.Path + "/" + title
@@ -70,7 +72,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		pageNames, _ := filepath.Glob(title + "/*.config")
 		boxNames, _ := filepath.Glob(title + "/*.box")
 
-		fmt.Println(len(pageNames)) 
+		fmt.Println(len(pageNames))
 		fmt.Println("Loaded shared page")
 
 		if pageNames == nil || boxNames == nil {
@@ -103,6 +105,10 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func AboutPage(w http.ResponseWriter, r *http.Request) {
+	var aboutPage = Page{Heading: "About",
+		SubHeading: ""}
+
+	_, about := initConfig(configuration)
 
 	headTemp.Execute(w, nil)
 	openBodyTemp.Execute(w, nil)
@@ -125,6 +131,8 @@ func PipeCompile(w http.ResponseWriter, req *http.Request) {
 
 	title := req.URL.Path[len("/pipeile/"):]
 
+	boxes := initBoxes(interfaces)
+
 	fmt.Println(title)
 	str := strings.Split(title, "/")
 	title = str[0]
@@ -141,7 +149,7 @@ func PipeCompile(w http.ResponseWriter, req *http.Request) {
 
 	updateBody(boxes, title, body.String())
 
-	out, err := InterfaceRun(interfaces[position-1], body.Bytes(), title)
+	out, err := InterfaceRun(interfaces[position-1], boxes, body.Bytes(), title)
 
 	if err != nil {
 		w.WriteHeader(404)
@@ -154,23 +162,28 @@ func PipeCompile(w http.ResponseWriter, req *http.Request) {
 }
 
 func sharHandler(w http.ResponseWriter, r *http.Request) {
-	out := Share()
+	page, _ := initConfig(configuration)
+	boxes := initBoxes(interfaces)
+	out := Share(page, boxes)
 	fmt.Println("PATH :/ " + configuration.Path)
-	Save(configuration.Path+"/", out)
+	Save(configuration.Path+"/", out, boxes)
 	shareOutput.Execute(w, out)
 }
 
-func initConfig(config *Config) {
+func initConfig(config *Config) (Page, AboutStruct) {
+	var about = AboutStruct{}
+	var page = Page{}
+
 	configuration = config
 	page.Heading = config.Heading
 	page.SubHeading = config.SubHeading
 	about.Text = config.About
 	about.SecondaryText = config.AboutSide
-	aboutPage.Heading = "About"
-	aboutPage.SubHeading = ""
+
+	return page, about
 }
 
-func initBoxes(boxs ...Box) {
+func initBoxes(boxs []Box) (boxes []*BoxStruct) {
 
 	for key := range boxs {
 
@@ -187,14 +200,13 @@ func initBoxes(boxs ...Box) {
 
 		boxes = append(boxes, &box)
 
-		interfaces = append(interfaces, boxs[key])
-
 	}
+	return boxes
 }
 
 func Serve(config *Config, boxs ...Box) (err error) {
-	initConfig(config)
-	initBoxes(boxs...)
+	configuration = config
+	interfaces = boxs
 
 	fmt.Println("cool beans")
 	http.HandleFunc("/share/", sharHandler)
