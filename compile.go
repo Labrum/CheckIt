@@ -60,7 +60,3 @@ func InterfaceRun(box Box, textareas []string, title string) (out []byte, err er
 
 	return out, err
 }
-
-func TimeOut() {
-	fmt.Print("TIME OUT")
-}

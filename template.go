@@ -93,7 +93,7 @@ var body = `<body>
                         <a href="/about">About</a>
                     </li>
                     <li>
-                        <a  href="#" onclick="save();return false;">Share</a>
+                        <a id="shareButton"  href="#" onclick="save();return false;">Share</a>
                     </li>
                     <li>
                         <textarea id="sharelink" class="sharelink hide" cols="40" rows="2" spellcheck="false"> default text</textarea>
@@ -281,9 +281,17 @@ var htmlCloseText = `    <!-- jQuery -->
     }
 
     if(window.location.href.length > window.location.origin.length+1){
-        window.onload = function(){
-            shareText();
-        };
+        if(window.location.href.contains("about")){
+            var s = document.getElementById("sharelink");
+            var sb = document.getElementById("shareButton");
+            s.className = "hide sharelink";
+            sb.className = "hide shareButton";
+
+        }else{
+            window.onload = function(){
+                shareText();
+            };
+        }
     }
        
     function shareText(request){
@@ -346,8 +354,7 @@ var htmlCloseText = `    <!-- jQuery -->
             image.src = req.responseText;
             imgDiv.className = "alert alert-success";
 
-        } else {
-            
+        } else {            
             err.innerHTML = req.responseText;
             out.className = "alert hide alert-success";
             err.className = "alert alert-danger";
