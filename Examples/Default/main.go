@@ -24,11 +24,9 @@ func main() {
 	var con = CheckIt.Config{
 		Path:       "share",
 		Port:       "8088",
-		Timeout:    100,
 		Heading:    "Testing",
-		SubHeading: "this is a SubHeading",
 		About:      "CheckIt is for the demonstration, sharing and storing of code snippets",
 		AboutSide:  `<a href="http://www.google.com"> Google </a>`,
 	}
-	CheckIt.Serve(&con, &list{}, &list{}, &list{})
+	CheckIt.Serve(&con, &list{}, &pic{})
 }
