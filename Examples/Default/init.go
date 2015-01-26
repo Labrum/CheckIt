@@ -17,42 +17,34 @@ limitations under the License.
 package main
 
 import (
-	"bytes"
-	"fmt"
-	"os/exec"
 	"strings"
+	"github.com/Labrum/CheckIt"
+	"time"
 )
 
 var BOXESONPAGE = 3
 
 type list struct{}
 
-func (l *list) Run(TextAreas []string, directory string) (out []byte, err error) {
-
-	var buff bytes.Buffer
-	var cmd *exec.Cmd
+func (l *list) Run(TextAreas []string, directory string, timeout time.Duration) (out []byte, err error) {
 
 	args := strings.Fields(TextAreas[0])
 
-	fmt.Println(args[0])
-	cmd = exec.Command(args[0], args[1:]...)
+//	var stderr []byte
 
-	cmd.Stdout = &buff
-	cmd.Stderr = cmd.Stdout
-	cmd.Dir = "./" + directory + "/"
-
-	err = cmd.Run()
-	out = buff.Bytes()
-
+	out,_,err = CheckIt.Run(args...)
+	
 	return out, err
 }
 
-func (l *list) Help() string {
-	return "This textbox uses the command line to list files"
+func (l *list) Descriptors() (string,string) {
+	title := "List files"
+	description :="This textbox uses the command line to list files"
+	return description,title
 }
 
-func (l *list) Default() string {
-	return `ls -l -a`
+func (l *list) Default() (string,time.Duration) {
+	return `ls -l -a`, 10000
 }
 
 func (l *list) Syntax() string {
