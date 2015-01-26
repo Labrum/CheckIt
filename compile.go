@@ -22,7 +22,6 @@ import (
 	"io/ioutil"
 	"math/rand"
 	"os"
-	"time"
 )
 
 var tempDirectory = ""
@@ -52,36 +51,11 @@ func InterfaceRun(box Box, textareas []string, title string) (out []byte, err er
 
 	os.Mkdir("./"+tempDirectory, 0777)
 
-//	writefile("./"+tempDirectory+"/"+title, body, "")
+	_,time := box.Default()
 
-	timeout := make(chan bool, 1)
-	inTime := make(chan bool, 1)
-
-	go func() {
-		fmt.Print(configuration.Timeout)
-		time.Sleep(configuration.Timeout * time.Second)
-		timeout <- true
-	}()
-
-	go func() {
-		out, err = box.Run(textareas, tempDirectory)
-		inTime <- true
-	}()
-
-	select {
-	case <-inTime:
-
-	case <-timeout:
-		if out == nil {
-			out = []byte("ERROR: Execution of code took too long.")
-		}
-	}
-
-	if err != nil {
-		fmt.Println(string(out))
-		return
-	}
-
+	os.Chdir(tempDirectory)
+	out, err = box.Run(textareas, tempDirectory,time)
+	os.Chdir("..")
 	defer os.RemoveAll("./" + tempDirectory + "/")
 
 	return out, err

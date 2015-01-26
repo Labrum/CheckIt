@@ -96,7 +96,7 @@ var body = `<body>
                         <a  href="#" onclick="save();return false;">Share</a>
                     </li>
                     <li>
-                        <a><textarea id="sharelink" class="sharelink hide" cols="30" rows="1" spellcheck="false"> default text</textarea></a>
+                        <textarea id="sharelink" class="sharelink hide" cols="40" rows="2" spellcheck="false"> default text</textarea>
                     </li>
                 </ul>
             </div>
@@ -110,9 +110,7 @@ var pageStartText = `  <!-- Page Content -->
         <!-- Page Heading -->
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">{{.Heading}}
-                    <small>{{.SubHeading}}</small>
-                </h1>
+                <h1 class="page-header">{{.Heading}}</h1>
             </div>
         </div>
         <!-- /.row -->
@@ -124,11 +122,11 @@ var boxText = `        <!-- Project One -->
             </div>
             <div class="col-md-5">
                 <h3>{{.Head}}</h3>
-                <h4>{{.SubHead}}</h4>
                 <p>{{.Text}}</p>
                 <button class="btn btn-primary" id= "compile" onclick="compile('{{ print .Id |html}}','{{ print .Position |html}}');" > Run <span class ='glyphicon glyphicon-chevron-right'></span></button>
                 </div>
         </div>
+        <div id = {{ print .Id |html}}imageDiv class="alert hide alert-success"><img id = {{ print .Id |html}}img src=""></div>
         <div id = {{ print .Id |html}}errors class="alert hide alert-danger"><p></p></div>
         <div id={{ print .Id |html}}output class="alert hide alert-success"><p></p></div>
         <!-- /.row -->
@@ -160,7 +158,7 @@ var pageCloseText = `
     </div>
 `
 var htmlCloseText = `    <!-- jQuery -->
-    <script src="js/jquery.js"></script>
+    //<script src="js/jquery.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
@@ -255,30 +253,44 @@ var htmlCloseText = `    <!-- jQuery -->
         
         var test = document.getElementsByClassName("codeBody");
 
-        var texts = []
+        var texts = [];
 
         for (var key in test) {
             texts.push(test[key].value);
         }
 
-
         var req1 = new XMLHttpRequest();
         xmlreq = req1;
-        req1.onreadystatechange = function(){share();}
+        req1.onload = function(){share();}
+        //share();
         req1.open("POST", window.location.origin+"/share/", true);
         req1.setRequestHeader("Content-Type", "text/plain; charset=utf-8");
         var myJsonString = JSON.stringify(texts);
         req1.send(myJsonString);
+        console.log("save1")
     }
 
     function share(){
-        var req1 = xmlreq;
 
-        var s = document.getElementById("sharelink");
-        s.className = "sharelink";
-        s.innerHTML = req1.responseText;
-        s.select();
-        
+        var req1 = xmlreq;
+        var req2 = new XMLHttpRequest();
+
+
+        window.location.href = window.location.origin+"/"+req1.responseText;
+        console.log("s1");
+    }
+
+    if(window.location.href.length > window.location.origin.length+1){
+        window.onload = function(){
+            shareText();
+        };
+    }
+       
+    function shareText(request){
+            var s = document.getElementById("sharelink");
+            s.className = "sharelink";
+            s.innerHTML = window.location.href;
+            s.select();
     }
 
     function autocompile() {
@@ -322,17 +334,23 @@ var htmlCloseText = `    <!-- jQuery -->
 
         console.log()
         var out = document.getElementById(boxId.concat("output"))
+        var imgDiv = document.getElementById(boxId.concat("imageDiv"))
+        var image = document.getElementById(boxId.concat("img"))
         var err = document.getElementById(boxId.concat("errors"))
         if(req.status == 200) {
            
             out.innerHTML = req.responseText;
-            out.className = "alert alert-success"
-            err.className = "alert hide alert-danger"
+            out.className = "alert alert-success";
+            err.className = "alert hide alert-danger";
+        } else if(req.status == 288) {
+            image.src = req.responseText;
+            imgDiv.className = "alert alert-success";
+
         } else {
             
             err.innerHTML = req.responseText;
-            out.className = "alert hide alert-success"
-            err.className = "alert alert-danger"
+            out.className = "alert hide alert-success";
+            err.className = "alert alert-danger";
         }
     }
     </script>   

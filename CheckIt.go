@@ -105,8 +105,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func AboutPage(w http.ResponseWriter, r *http.Request) {
-	var aboutPage = Page{Heading: "About",
-		SubHeading: ""}
+	var aboutPage = Page{Heading: "About"}
 
 	_, about := initConfig(configuration)
 
@@ -156,8 +155,14 @@ func PipeCompile(w http.ResponseWriter, req *http.Request) {
 	out, err := InterfaceRun(interfaces[position-1], textboxes, title)
 
 	if err != nil {
-		w.WriteHeader(404)
-		output.Execute(w, out)
+		if err.Error() == "Picture"{
+			w.WriteHeader(288)
+			shareOutput.Execute(w, out)
+
+		}else{
+			w.WriteHeader(404)
+			output.Execute(w, out)
+		}
 	} else if *htmlOutput {
 		w.Write(out)
 	} else {
@@ -179,8 +184,6 @@ func sharHandler(w http.ResponseWriter, req *http.Request) {
 		panic(err)
 	}
 
-
-
 	page, _ := initConfig(configuration)
 
 	out := Share(page)
@@ -200,7 +203,6 @@ func initConfig(config *Config) (Page, AboutStruct) {
 
 	configuration = config
 	page.Heading = config.Heading
-	page.SubHeading = config.SubHeading
 	about.Text = config.About
 	about.SecondaryText = config.AboutSide
 
@@ -217,10 +219,9 @@ func initBoxes(boxs []Box) (boxes []*BoxStruct) {
 		box.Position = strconv.Itoa(key + 1)
 		box.Total = len(boxs)
 		box.Lang = boxs[key].Syntax()
-		box.Body = boxs[key].Default()
-		box.Head = "Heading"
-		box.SubHead = "Subhead"
-		box.Text = boxs[key].Help()
+		text,_ := boxs[key].Default()
+		box.Body = text
+		box.Text, box.Head = boxs[key].Descriptors()
 
 		boxes = append(boxes, &box)
 

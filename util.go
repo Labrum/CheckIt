@@ -20,29 +20,27 @@ import (
 	"fmt"
 	"os/exec"
 	"strings"
+	"bytes"
 	"time"
 )
 
 type Box interface {
-	Help() string
-	Default() string
+	Descriptors() (string,string)
+	Default() (string,time.Duration)
 	Syntax() string
-	Run(TextAreas []string, directory string) ([]byte, error)
+	Run(TextAreas []string, directory string, timeout time.Duration) ([]byte, error)
 }
 
 type Config struct {
 	Path       string
 	Port       string
-	Timeout    time.Duration
 	About      string
 	AboutSide  string
 	Heading    string
-	SubHeading string
 }
 
 type Page struct {
 	Heading    string
-	SubHeading string
 }
 
 type AboutStruct struct {
@@ -55,7 +53,6 @@ type BoxStruct struct {
 	Position string
 	Total    int
 	Head     string
-	SubHead  string
 	Text     string
 	Lang     string
 	Body     string
@@ -99,8 +96,23 @@ func CombinedRun(args ...string) (out []byte, err error) {
 
 	cmd = exec.Command(args[0], args[1:]...)
 
-	cmd.Stderr = cmd.Stdout
 	out, err = cmd.CombinedOutput()
 
 	return out, err
+}
+
+
+func Run(args ...string) (out []byte, stderr []byte, err error) {
+
+	var buf bytes.Buffer
+	var errBuf bytes.Buffer
+
+	cmd := exec.Command(args[0], args[1:]...)
+	cmd.Stdout = &buf
+	cmd.Stderr = &errBuf
+
+	err = cmd.Run()
+
+	return buf.Bytes(), errBuf.Bytes() , err
+	
 }

@@ -28,12 +28,10 @@ func Share(page Page) string {
 	var buff bytes.Buffer
 
 	buff.WriteString(page.Heading)
-	buff.WriteString(page.SubHeading)
 
 	for key := range boxes {
 		buff.WriteString(boxes[key].Id)
 		buff.WriteString(boxes[key].Head)
-		buff.WriteString(boxes[key].SubHead)
 		buff.WriteString(boxes[key].Text)
 		buff.WriteString(boxes[key].Lang)
 		buff.WriteString(boxes[key].Body)
@@ -85,10 +83,26 @@ func writeSave(dir string, filename string, body []byte, ext string) {
 	}
 }
 
+// exists returns whether the given file or directory exists or not
+func exists(path string) (bool, error) {
+    _, err := os.Stat(path)
+    if err == nil { return true, nil }
+    if os.IsNotExist(err) { return false, nil }
+    return false, err
+}
+
 func Save(path string, folderName string) {
 	var buff bytes.Buffer
-	os.Mkdir(path+folderName, 0777)
 
+	pathExists,_ := exists(path)
+	
+	if pathExists {
+		os.Mkdir(path+folderName, 0777)
+	} else {
+		os.Mkdir(path, 0777)
+		os.Mkdir(path+folderName,0777)
+	}
+	
 	temp, _ := json.Marshal(configuration)
 	buff.WriteString(string(temp))
 	writeSave(path+folderName, "conf", buff.Bytes(), ".config")
