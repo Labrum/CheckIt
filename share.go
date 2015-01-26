@@ -13,97 +13,106 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package main
+package CheckIt
 
-import(
+import (
 	"bytes"
 	"crypto/md5"
-	"fmt"
-	"os"
-	"io/ioutil"	
 	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"os"
 )
 
-func Share() string {
+func Share(page Page) string {
 	var buff bytes.Buffer
 
-	buff.WriteString(page.Title)
 	buff.WriteString(page.Heading)
-	buff.WriteString(page.SubHeading)
-	buff.WriteString(page.Author)
 
 	for key := range boxes {
 		buff.WriteString(boxes[key].Id)
 		buff.WriteString(boxes[key].Head)
-		buff.WriteString(boxes[key].SubHead)
 		buff.WriteString(boxes[key].Text)
 		buff.WriteString(boxes[key].Lang)
 		buff.WriteString(boxes[key].Body)
-		buff.WriteString(boxes[key].Output)
-		buff.WriteString(boxes[key].ErrorOut)		
 	}
 
 	hash := md5.Sum(buff.Bytes())
 
-	return fmt.Sprintf("%x",hash)
+	return fmt.Sprintf("%x", hash)
 
 }
 
-func ReadPage(filename string) *Page{
+func ReadConfig(filename string) *Config {
 
 	f, _ := os.Open(filename)
 
 	file, _ := ioutil.ReadAll(f)
-	
-	p := Page{}
 
-	if err := json.Unmarshal(file, &p); err != nil {
-        panic(err)
-    }
+	c := Config{}
 
-    return &p
+	if err := json.Unmarshal(file, &c); err != nil {
+		panic(err)
+	}
+
+	return &c
 
 }
 
-func ReadBox(filename string) *Box{
+func ReadBox(filename string) *BoxStruct {
 
 	f, _ := os.Open(filename)
 
 	file, _ := ioutil.ReadAll(f)
-	
-	b := Box{}
+
+	b := BoxStruct{}
 
 	if err := json.Unmarshal(file, &b); err != nil {
-        panic(err)
-    }
+		panic(err)
+	}
 
-    return &b
+	return &b
 
 }
 
+func writeSave(dir string, filename string, body []byte, ext string) {
 
-func writeSave(dir string,filename string, body []byte, ext string){
-	
-	err := ioutil.WriteFile(dir+"/"+filename+ext, body,0777)
-	if(err!= nil){
+	err := ioutil.WriteFile(dir+"/"+filename+ext, body, 0777)
+	if err != nil {
 		return
 	}
 }
 
-func Save(folderName string){
-	var buff bytes.Buffer
-	os.Mkdir(folderName,0777)
+// exists returns whether the given file or directory exists or not
+func exists(path string) (bool, error) {
+    _, err := os.Stat(path)
+    if err == nil { return true, nil }
+    if os.IsNotExist(err) { return false, nil }
+    return false, err
+}
 
-	temp,_ := json.Marshal(page)
+func Save(path string, folderName string) {
+	var buff bytes.Buffer
+
+	pathExists,_ := exists(path)
+	
+	if pathExists {
+		os.Mkdir(path+folderName, 0777)
+	} else {
+		os.Mkdir(path, 0777)
+		os.Mkdir(path+folderName,0777)
+	}
+	
+	temp, _ := json.Marshal(configuration)
 	buff.WriteString(string(temp))
-	writeSave(folderName,"page",buff.Bytes(),".page")
+	writeSave(path+folderName, "conf", buff.Bytes(), ".config")
 	buff.Reset()
 
 	for key := range boxes {
-		tmp,_ := json.Marshal(boxes[key])
+		tmp, _ := json.Marshal(boxes[key])
 		buff.WriteString(string(tmp))
-		writeSave(folderName,boxes[key].Id,buff.Bytes(),".box")
+		writeSave(path+folderName, boxes[key].Id, buff.Bytes(), ".box")
 		buff.Reset()
-	}	
+	}
 
 }

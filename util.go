@@ -14,76 +14,105 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package main
+package CheckIt
 
 import (
 	"fmt"
+	"os/exec"
 	"strings"
+	"bytes"
+	"time"
 )
 
-type CompileOut struct{
-	Out []byte
-	Error error
+type Box interface {
+	Descriptors() (string,string)
+	Default() (string,time.Duration)
+	Syntax() string
+	Run(TextAreas []string, directory string, timeout time.Duration) ([]byte, error)
+}
+
+type Config struct {
+	Path       string
+	Port       string
+	About      string
+	AboutSide  string
+	Heading    string
 }
 
 type Page struct {
-	Title string
-	Heading string
-	SubHeading string
-	Author string
-	Body []byte
+	Heading    string
 }
 
-type About struct{
-	Text string
+type AboutStruct struct {
+	Text          string
 	SecondaryText string
 }
 
-type Box struct{
-	Id string
+type BoxStruct struct {
+	Id       string
 	Position string
-	Total int
-	Head string
-	SubHead string
-	Text string
-	Lang string
-	Body string
-	Output string
-	ErrorOut string
+	Total    int
+	Head     string
+	Text     string
+	Lang     string
+	Body     string
 }
 
-type Boxes []*Box
+type Boxes []*BoxStruct
 
 func (this Boxes) Len() int {
 	return len(this)
 }
 
-func Lang(this []*Box,name string) string{
+func Lang(this []*BoxStruct, name string) string {
 
 	for key := range this {
-		if strings.EqualFold(this[key].Id,name){
+		if strings.EqualFold(this[key].Id, name) {
 			return this[key].Lang
 		}
 	}
 	return ""
 }
 
-func updateBody(this []*Box,name string, bod string ) {
+func updateBody(this []*BoxStruct, text []string) {
 	for key := range this {
-		if strings.EqualFold(this[key].Id,name){
-			this[key].Body = bod
-		}
+			this[key].Body = text[key]
 	}
 }
 
-func printBoxes(this []*Box){
+func printBoxes(this []*BoxStruct) {
 	for key := range this {
-		fmt.Print(this[key].Body);
-		
+		fmt.Print(this[key].Body)
 	}
-
 }
 
 func (this Boxes) Swap(i, j int) {
 	this[i], this[j] = this[j], this[i]
+}
+
+func CombinedRun(args ...string) (out []byte, err error) {
+
+	var cmd *exec.Cmd
+
+	cmd = exec.Command(args[0], args[1:]...)
+
+	out, err = cmd.CombinedOutput()
+
+	return out, err
+}
+
+
+func Run(args ...string) (out []byte, stderr []byte, err error) {
+
+	var buf bytes.Buffer
+	var errBuf bytes.Buffer
+
+	cmd := exec.Command(args[0], args[1:]...)
+	cmd.Stdout = &buf
+	cmd.Stderr = &errBuf
+
+	err = cmd.Run()
+
+	return buf.Bytes(), errBuf.Bytes() , err
+	
 }
