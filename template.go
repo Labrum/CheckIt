@@ -126,7 +126,6 @@ var boxText = `        <!-- Project One -->
                 <button class="btn btn-primary" id= "compile" onclick="compile('{{ print .Id |html}}','{{ print .Position |html}}');" > Run <span class ='glyphicon glyphicon-chevron-right'></span></button>
                 </div>
         </div>
-        <div id = {{ print .Id |html}}imageDiv class="alert hide alert-success"><img id = {{ print .Id |html}}img src=""></div>
         <div id = {{ print .Id |html}}errors class="alert hide alert-danger"><p></p></div>
         <div id={{ print .Id |html}}output class="alert hide alert-success"><p></p></div>
         <!-- /.row -->
@@ -342,18 +341,12 @@ var htmlCloseText = `    <!-- jQuery -->
 
         console.log()
         var out = document.getElementById(boxId.concat("output"))
-        var imgDiv = document.getElementById(boxId.concat("imageDiv"))
-        var image = document.getElementById(boxId.concat("img"))
         var err = document.getElementById(boxId.concat("errors"))
         if(req.status == 200) {
            
             out.innerHTML = req.responseText;
             out.className = "alert alert-success";
             err.className = "alert hide alert-danger";
-        } else if(req.status == 288) {
-            image.src = req.responseText;
-            imgDiv.className = "alert alert-success";
-
         } else {            
             err.innerHTML = req.responseText;
             out.className = "alert hide alert-success";

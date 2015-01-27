@@ -118,7 +118,7 @@ func AboutPage(w http.ResponseWriter, r *http.Request) {
 
 }
 
-var outputText = `<pre>{{printf "%s" . |html}}</pre>`
+var outputText = `<pre>{{printf "%s" .}}</pre>`
 var output = template.Must(template.New("output").Parse(outputText))
 var shareText = `{{printf "%s" . |html}}`
 var shareOutput = template.Must(template.New("shareOutput").Parse(shareText))
@@ -155,14 +155,8 @@ func PipeCompile(w http.ResponseWriter, req *http.Request) {
 	out, err := InterfaceRun(interfaces[position-1], textboxes, title)
 
 	if err != nil {
-		if err.Error() == "Picture"{
-			w.WriteHeader(288)
-			shareOutput.Execute(w, out)
-
-		}else{
 			w.WriteHeader(404)
 			output.Execute(w, out)
-		}
 	} else if *htmlOutput {
 		w.Write(out)
 	} else {
