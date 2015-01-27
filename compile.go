@@ -51,16 +51,10 @@ func InterfaceRun(box Box, textareas []string, title string) (out []byte, err er
 
 	os.Mkdir("./"+tempDirectory, 0777)
 
-	_,time := box.Default()
-
 	os.Chdir(tempDirectory)
-	out, err = box.Run(textareas, tempDirectory,time)
+	out, err = box.Run(textareas)
 	os.Chdir("..")
 	defer os.RemoveAll("./" + tempDirectory + "/")
 
 	return out, err
-}
-
-func TimeOut() {
-	fmt.Print("TIME OUT")
 }

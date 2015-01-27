@@ -22,13 +22,12 @@ import (
 	"strings"
 	"bytes"
 	"time"
+	"errors"
 )
 
 type Box interface {
-	Descriptors() (string,string)
-	Default() (string,time.Duration)
-	Syntax() string
-	Run(TextAreas []string, directory string, timeout time.Duration) ([]byte, error)
+	Desc() (heading string, description string, text string, syntax string)
+	Run(textAreas []string) ([]byte, error)
 }
 
 type Config struct {
@@ -90,19 +89,36 @@ func (this Boxes) Swap(i, j int) {
 	this[i], this[j] = this[j], this[i]
 }
 
-func CombinedRun(args ...string) (out []byte, err error) {
+func CombinedRun(timeout time.Duration, args ...string) (out []byte, err error) {
 
 	var cmd *exec.Cmd
 
 	cmd = exec.Command(args[0], args[1:]...)
 
-	out, err = cmd.CombinedOutput()
+	kill := make(chan bool, 1)
+	completed := make(chan bool, 1)
+
+	go func(){
+		time.Sleep(timeout)
+		kill<- true
+	}()
+	go func(){
+		out, err = cmd.CombinedOutput()
+		completed<- true	
+	}()
+
+	select {
+		case <- completed:
+		case <- kill:
+			out = []byte("Error Command timed out!")
+			err = errors.New("Timed Out")
+	}
 
 	return out, err
 }
 
 
-func Run(args ...string) (out []byte, stderr []byte, err error) {
+func Run(timeout time.Duration,args ...string) (out []byte, stderr []byte, err error) {
 
 	var buf bytes.Buffer
 	var errBuf bytes.Buffer
@@ -111,7 +127,26 @@ func Run(args ...string) (out []byte, stderr []byte, err error) {
 	cmd.Stdout = &buf
 	cmd.Stderr = &errBuf
 
-	err = cmd.Run()
+
+	kill := make(chan bool, 1)
+	completed := make(chan bool, 1)
+
+	go func(){
+		time.Sleep(timeout)
+		kill<- true
+	}()
+	go func(){
+		err = cmd.Run()
+		completed<- true	
+	}()
+
+	select {
+		case <- completed:
+		case <- kill:
+			out = []byte("Error Command timed out!")
+			err = errors.New("Timed Out")
+			return out, nil, err
+	}
 
 	return buf.Bytes(), errBuf.Bytes() , err
 	
