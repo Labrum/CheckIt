@@ -284,7 +284,9 @@ var htmlCloseText = `    <!-- jQuery -->
             var s = document.getElementById("sharelink");
             var sb = document.getElementById("shareButton");
             s.className = "hide sharelink";
+            s.style.display = 'none';
             sb.className = "hide shareButton";
+            sb.style.display = 'none';
 
         }else{
             window.onload = function(){
