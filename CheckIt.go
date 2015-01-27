@@ -69,11 +69,10 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 	} else {
 		title := r.URL.Path[len("/"):]
 		title = configuration.Path + "/" + title
-		fmt.Println(title)
+
 		pageNames, _ := filepath.Glob(title + "/*.config")
 		boxNames, _ := filepath.Glob(title + "/*.box")
 
-		fmt.Println(len(pageNames))
 		fmt.Println("Loaded shared page")
 
 		if pageNames == nil || boxNames == nil {
@@ -81,7 +80,6 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		} else {
 
 			pageName := pageNames[0]
-			fmt.Println(boxNames)
 
 			headTemp.Execute(w, nil)
 			openBodyTemp.Execute(w, nil)
@@ -130,7 +128,6 @@ func PipeCompile(w http.ResponseWriter, req *http.Request) {
 
 	title := req.URL.Path[len("/pipeile/"):]
 
-	fmt.Println(title)
 	str := strings.Split(title, "/")
 	title = str[0]
 
@@ -148,9 +145,7 @@ func PipeCompile(w http.ResponseWriter, req *http.Request) {
 		panic(err)
 	}
 
-	fmt.Println(position)
-
-	updateBody(boxes, textboxes)
+		updateBody(boxes, textboxes)
 
 	out, err := InterfaceRun(interfaces[position-1], textboxes, title)
 
@@ -181,8 +176,7 @@ func sharHandler(w http.ResponseWriter, req *http.Request) {
 	page, _ := initConfig(configuration)
 
 	out := Share(page)
-	fmt.Println("PATH :/ " + configuration.Path)
-
+	
 	mux :=  &sync.Mutex{}
 	mux.Lock()
 	updateBody(boxes, textboxes)	
@@ -228,12 +222,12 @@ func Serve(config *Config, boxs ...Box) (err error) {
 	configuration = config
 	interfaces = boxs
 
-	fmt.Println("cool beans")
+	fmt.Println("Server Hosted")
 	http.HandleFunc("/share/", sharHandler)
 	http.HandleFunc("/about", AboutPage)
 	http.HandleFunc("/", FrontPage)
 	http.HandleFunc("/compile/", PipeCompile)
-	http.ListenAndServe(":"+configuration.Port, nil)
+	http.ListenAndServe(configuration.Port, nil)
 
 	err = errors.New("Server crashed")
 	return err

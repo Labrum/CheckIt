@@ -13,3 +13,9 @@ build: $(SOURCE)
 
 clean: 
 	$(GOCLEAN)
+
+gofmt:
+	gofmt -l -s -w
+
+vet:
+	go vet ./...
