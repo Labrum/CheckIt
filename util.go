@@ -22,6 +22,7 @@ import (
 	"strings"
 	"bytes"
 	"time"
+	"errors"
 )
 
 type Box interface {
@@ -94,7 +95,24 @@ func CombinedRun(timeout time.Duration, args ...string) (out []byte, err error) 
 
 	cmd = exec.Command(args[0], args[1:]...)
 
-	out, err = cmd.CombinedOutput()
+	kill := make(chan bool, 1)
+	completed := make(chan bool, 1)
+
+	go func(){
+		time.Sleep(timeout)
+		kill<- true
+	}()
+	go func(){
+		out, err = cmd.CombinedOutput()
+		completed<- true	
+	}()
+
+	select {
+		case <- completed:
+		case <- kill:
+			out = []byte("Error Command timed out!")
+			err = errors.New("Timed Out")
+	}
 
 	return out, err
 }
@@ -109,7 +127,26 @@ func Run(timeout time.Duration,args ...string) (out []byte, stderr []byte, err e
 	cmd.Stdout = &buf
 	cmd.Stderr = &errBuf
 
-	err = cmd.Run()
+
+	kill := make(chan bool, 1)
+	completed := make(chan bool, 1)
+
+	go func(){
+		time.Sleep(timeout)
+		kill<- true
+	}()
+	go func(){
+		err = cmd.Run()
+		completed<- true	
+	}()
+
+	select {
+		case <- completed:
+		case <- kill:
+			out = []byte("Error Command timed out!")
+			err = errors.New("Timed Out")
+			return out, nil, err
+	}
 
 	return buf.Bytes(), errBuf.Bytes() , err
 	
