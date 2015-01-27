@@ -214,15 +214,16 @@ func initBoxes(boxs []Box) (boxes []*BoxStruct) {
 	for key := range boxs {
 
 		var box = BoxStruct{}
+		heading,description,text,syntax := boxs[key].Desc()
 
 		box.Id = strconv.Itoa(key)
 		box.Position = strconv.Itoa(key + 1)
 		box.Total = len(boxs)
-		box.Lang = boxs[key].Syntax()
-		text,_ := boxs[key].Default()
+		box.Lang = syntax
+		
 		box.Body = text
-		box.Text, box.Head = boxs[key].Descriptors()
-
+		box.Text = description
+		box.Head = heading
 		boxes = append(boxes, &box)
 
 	}

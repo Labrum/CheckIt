@@ -25,10 +25,8 @@ import (
 )
 
 type Box interface {
-	Descriptors() (string,string)
-	Default() (string,time.Duration)
-	Syntax() string
-	Run(TextAreas []string, directory string, timeout time.Duration) ([]byte, error)
+	Desc() (heading string, description string, text string, syntax string)
+	Run(textAreas []string) ([]byte, error)
 }
 
 type Config struct {
@@ -90,7 +88,7 @@ func (this Boxes) Swap(i, j int) {
 	this[i], this[j] = this[j], this[i]
 }
 
-func CombinedRun(args ...string) (out []byte, err error) {
+func CombinedRun(timeout time.Duration, args ...string) (out []byte, err error) {
 
 	var cmd *exec.Cmd
 
@@ -102,7 +100,7 @@ func CombinedRun(args ...string) (out []byte, err error) {
 }
 
 
-func Run(args ...string) (out []byte, stderr []byte, err error) {
+func Run(timeout time.Duration,args ...string) (out []byte, stderr []byte, err error) {
 
 	var buf bytes.Buffer
 	var errBuf bytes.Buffer
