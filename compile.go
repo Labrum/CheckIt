@@ -22,9 +22,8 @@ import (
 	"io/ioutil"
 	"math/rand"
 	"os"
+//	"path"
 )
-
-var tempDirectory = ""
 
 func writefile(filename string, body []byte, ext string) {
 
@@ -42,19 +41,29 @@ func randFolder() string {
 	return fmt.Sprintf("%x", hash)
 }
 
-/*
+/*golang
 	Runs commands specified in args using input as Stdin
 */
-func InterfaceRun(box Box, textareas []string, title string) (out []byte, err error) {
+func InterfaceRun(box Box, textareas []string) (out []byte, err error) {
 
-	tempDirectory = randFolder()
+/*
+	for debugging
+*/
+//	root,err = os.Getwd()
+	//fmt.Print(root)
+	tempDirectory := randFolder()
 
-	os.Mkdir("./"+tempDirectory, 0777)
+	os.Mkdir(root+"/"+tempDirectory, 0777)
 
-	os.Chdir(tempDirectory)
-	out, err = box.Run(textareas)
-	os.Chdir("..")
-	defer os.RemoveAll("./" + tempDirectory + "/")
-
+	//os.Chdir(tempDirectory)
+	out, err = box.Run(textareas,tempDirectory)
+	
+	defer cleanUp(tempDirectory)
 	return out, err
+}
+
+func cleanUp(tempDir string){
+	os.Chdir(root)
+	os.RemoveAll(root +"/" + tempDir)
+
 }

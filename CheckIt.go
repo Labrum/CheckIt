@@ -28,6 +28,7 @@ import (
 	"text/template"
 	"encoding/json"
 	"sync"
+	"os"
 )
 
 var interfaces = []Box{}
@@ -129,7 +130,6 @@ func PipeCompile(w http.ResponseWriter, req *http.Request) {
 	title := req.URL.Path[len("/pipeile/"):]
 
 	str := strings.Split(title, "/")
-	title = str[0]
 
 	position, _ := strconv.Atoi(str[1])
 
@@ -145,9 +145,9 @@ func PipeCompile(w http.ResponseWriter, req *http.Request) {
 		panic(err)
 	}
 
-		updateBody(boxes, textboxes)
+	updateBody(boxes, textboxes)
 
-	out, err := InterfaceRun(interfaces[position-1], textboxes, title)
+	out, err := InterfaceRun(interfaces[position-1], textboxes)
 
 	if err != nil {
 			w.WriteHeader(404)
@@ -213,14 +213,16 @@ func initBoxes(boxs []Box) (boxes []*BoxStruct) {
 		box.Text = description
 		box.Head = heading
 		boxes = append(boxes, &box)
-
 	}
 	return boxes
 }
 
+var root string
 func Serve(config *Config, boxs ...Box) (err error) {
 	configuration = config
 	interfaces = boxs
+
+	root,err = os.Getwd()
 
 	fmt.Println("Server Hosted")
 	http.HandleFunc("/share/", sharHandler)

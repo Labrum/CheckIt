@@ -27,7 +27,7 @@ import (
 
 type Box interface {
 	Desc() (heading string, description string, text string, syntax string)
-	Run(textAreas []string) ([]byte, error)
+	Run(textAreas []string,runPath string) ([]byte, error)
 }
 
 type Config struct {
