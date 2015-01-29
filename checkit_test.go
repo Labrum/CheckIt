@@ -5,6 +5,7 @@ import(
 	"io/ioutil"
 	"time"
 	"os"
+	"path/filepath"
 )
 
 
@@ -12,10 +13,10 @@ type tester struct{}
 
 
 func (l *tester) Run(TextAreas []string,runPath string) (out []byte, err error) {
-		os.Chdir("/"+runPath)
-		err = ioutil.WriteFile("hello.go", []byte(TextAreas[0]), 0777)
+		filename := filepath.Join(runPath,"hello.go")
+		err = ioutil.WriteFile(filename, []byte(TextAreas[0]), 0777)
 
-		out,err = CombinedRun(100000000000,"go","run","hello.go")
+		out,err = CombinedRun(100000000000,"go","run",filename)
 		os.Chdir("..")
 		return out, err
 }
@@ -35,6 +36,8 @@ func (l *tester) Desc() (heading string, description string, text string, syntax
 }
 
 func TestConc(t *testing.T){
+
+	root, _  = os.Getwd()
 
 	texts := []string{`package main
 		import(

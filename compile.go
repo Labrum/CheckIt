@@ -46,16 +46,8 @@ func randFolder() string {
 */
 func InterfaceRun(box Box, textareas []string) (out []byte, err error) {
 
-/*
-	for debugging
-*/
-//	root,err = os.Getwd()
-	//fmt.Print(root)
 	tempDirectory := randFolder()
-
 	os.Mkdir(root+"/"+tempDirectory, 0777)
-
-	//os.Chdir(tempDirectory)
 	out, err = box.Run(textareas,tempDirectory)
 	
 	defer cleanUp(tempDirectory)
@@ -63,7 +55,6 @@ func InterfaceRun(box Box, textareas []string) (out []byte, err error) {
 }
 
 func cleanUp(tempDir string){
-	os.Chdir(root)
 	os.RemoveAll(root +"/" + tempDir)
 
 }

@@ -218,6 +218,7 @@ func initBoxes(boxs []Box) (boxes []*BoxStruct) {
 }
 
 var root string
+
 func Serve(config *Config, boxs ...Box) (err error) {
 	configuration = config
 	interfaces = boxs
