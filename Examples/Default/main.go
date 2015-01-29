@@ -22,11 +22,11 @@ import (
 
 func main() {
 	var con = CheckIt.Config{
-		Path:       "share",
-		Port:       "8088",
-		Heading:    "Testing",
-		About:      "CheckIt is for the demonstration, sharing and storing of code snippets",
-		AboutSide:  `<a href="http://www.google.com"> Google </a>`,
+		Path:      "share",
+		Port:      ":8088",
+		Heading:   "Testing",
+		About:     "CheckIt is for the demonstration, sharing and storing of code snippets",
+		AboutSide: `<a href="http://www.google.com"> Google </a>`,
 	}
 	CheckIt.Serve(&con, &list{}, &pic{})
 }

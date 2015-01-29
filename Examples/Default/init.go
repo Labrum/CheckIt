@@ -17,27 +17,28 @@ limitations under the License.
 package main
 
 import (
-	"strings"
 	"github.com/Labrum/CheckIt"
+	"strings"
 )
 
 var BOXESONPAGE = 3
 
 type list struct{}
 
-func (l *list) Run(textAreas []string) (out []byte, err error) {
+func (l *list) Run(textAreas []string, runPath string) (out []byte, err error) {
 
 	args := strings.Fields(textAreas[0])
 
-	out,_,err = CheckIt.Run(1000,args...)
-	
+	args = append(args, "./"+runPath)
+	out, _, err = CheckIt.Run(1000000000, args...)
+
 	return out, err
 }
 
 func (l *list) Desc() (heading string, description string, text string, syntax string) {
 	heading = "List files"
-	description ="This textbox uses the command line to list files"
+	description = "This textbox uses the command line to list files"
 	text = `ls -l -a`
 	syntax = "cmd"
-	return heading,description,text,syntax
+	return heading, description, text, syntax
 }

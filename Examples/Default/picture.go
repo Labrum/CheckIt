@@ -22,9 +22,9 @@ func dot(dotStr string, filename string) ([]byte, error) {
 	return CheckIt.CombinedRun(timeout, "dot", dotFilename, "-Tpng", "-o", dotPicFilename)
 }
 
-func (l *pic) Run(TextAreas []string) (out []byte, err error) {
+func (l *pic) Run(TextAreas []string, runPath string) (out []byte, err error) {
 
-	fName := "my"
+	fName := "./" + runPath + "/my"
 	fType := "png"
 	out, err = dot(TextAreas[1], fName+"."+fType)
 	if err != nil {
