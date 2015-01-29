@@ -89,12 +89,12 @@ func (this Boxes) Swap(i, j int) {
 	this[i], this[j] = this[j], this[i]
 }
 
-func CombinedRun(timeout time.Duration, args ...string) (out []byte, err error) {
+func CombinedRun(timeout time.Duration, runPath string, args ...string) (out []byte, err error) {
 
 	var cmd *exec.Cmd
 
 	cmd = exec.Command(args[0], args[1:]...)
-
+	cmd.Dir = runPath
 	kill := make(chan bool, 1)
 	completed := make(chan bool, 1)
 
@@ -118,7 +118,7 @@ func CombinedRun(timeout time.Duration, args ...string) (out []byte, err error) 
 }
 
 
-func Run(timeout time.Duration,args ...string) (out []byte, stderr []byte, err error) {
+func Run(timeout time.Duration, runPath string,args ...string) (out []byte, stderr []byte, err error) {
 
 	var buf bytes.Buffer
 	var errBuf bytes.Buffer
@@ -126,6 +126,7 @@ func Run(timeout time.Duration,args ...string) (out []byte, stderr []byte, err e
 	cmd := exec.Command(args[0], args[1:]...)
 	cmd.Stdout = &buf
 	cmd.Stderr = &errBuf
+	cmd.Dir = runPath
 
 
 	kill := make(chan bool, 1)
