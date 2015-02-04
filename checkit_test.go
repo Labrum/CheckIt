@@ -1,6 +1,7 @@
 package CheckIt
 
 import(
+	"fmt"
 	"testing"
 	"io/ioutil"
 	"time"
@@ -14,10 +15,11 @@ type tester struct{}
 
 func (l *tester) Run(TextAreas []string,runPath string) (out []byte, err error) {
 		filename := filepath.Join(runPath,"hello.go")
+		
 		err = ioutil.WriteFile(filename, []byte(TextAreas[0]), 0777)
 
-		out,err = CombinedRun(100000000000,"go","run",filename)
-		os.Chdir("..")
+		out,err = CombinedRun(10000000000000000,runPath,"go", "run", "hello.go")
+
 		return out, err
 }
 
@@ -30,14 +32,14 @@ func (l *tester) Desc() (heading string, description string, text string, syntax
 		) 
 		func main(){
 			fmt.Print("hello")
-			}`
+		}`
 	syntax = "go"
 	return heading, description, text, syntax
 }
 
-func TestConc(t *testing.T){
 
-	root, _  = os.Getwd()
+
+func TestConc(t *testing.T){
 
 	texts := []string{`package main
 		import(
@@ -49,9 +51,10 @@ func TestConc(t *testing.T){
 
 	for i := 0; i< 10;i++{
 		go func(){
+			root , _  = os.Getwd()
 			out,_ := InterfaceRun(&tester{},texts)
 			if string(out) != "hello" {
-				t.Errorf("Expected %s received %s",string(out),"hello")
+				t.Errorf("Received %s , expected %s.",string(out),"hello")
 			}
 		}()
     }
@@ -59,6 +62,7 @@ func TestConc(t *testing.T){
 	fileNames, _ := ioutil.ReadDir(".")
 	for _, f := range fileNames {
         if len(f.Name()) == 32{
+        	fmt.Print(f.Name())
         	t.Fail()
         }
 

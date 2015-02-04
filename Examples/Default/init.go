@@ -29,8 +29,7 @@ func (l *list) Run(textAreas []string, runPath string) (out []byte, err error) {
 
 	args := strings.Fields(textAreas[0])
 
-	args = append(args, "./"+runPath)
-	out, _, err = CheckIt.Run(1000000000, args...)
+	out, _, err = CheckIt.Run(1000000000,runPath,  args...)
 
 	return out, err
 }
