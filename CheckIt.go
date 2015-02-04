@@ -18,17 +18,17 @@ package CheckIt
 
 import (
 	"bytes"
+	"encoding/json"
 	"errors"
 	"flag"
 	"fmt"
 	"net/http"
+	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
-	"text/template"
-	"encoding/json"
 	"sync"
-	"os"
+	"text/template"
 )
 
 var interfaces = []Box{}
@@ -150,8 +150,8 @@ func PipeCompile(w http.ResponseWriter, req *http.Request) {
 	out, err := InterfaceRun(interfaces[position-1], textboxes)
 
 	if err != nil {
-			w.WriteHeader(404)
-			output.Execute(w, out)
+		w.WriteHeader(404)
+		output.Execute(w, out)
 	} else if *htmlOutput {
 		w.Write(out)
 	} else {
@@ -176,10 +176,10 @@ func sharHandler(w http.ResponseWriter, req *http.Request) {
 	page, _ := initConfig(configuration)
 
 	out := Share(page)
-	
-	mux :=  &sync.Mutex{}
+
+	mux := &sync.Mutex{}
 	mux.Lock()
-	updateBody(boxes, textboxes)	
+	updateBody(boxes, textboxes)
 	Save(configuration.Path+"/", out)
 	mux.Unlock()
 	shareOutput.Execute(w, out)
@@ -202,13 +202,13 @@ func initBoxes(boxs []Box) (boxes []*BoxStruct) {
 	for key := range boxs {
 
 		var box = BoxStruct{}
-		heading,description,text,syntax := boxs[key].Desc()
+		heading, description, text, syntax := boxs[key].Desc()
 
 		box.Id = strconv.Itoa(key)
 		box.Position = strconv.Itoa(key + 1)
 		box.Total = len(boxs)
 		box.Lang = syntax
-		
+
 		box.Body = text
 		box.Text = description
 		box.Head = heading
@@ -223,7 +223,7 @@ func Serve(config *Config, boxs ...Box) (err error) {
 	configuration = config
 	interfaces = boxs
 
-	root,err = os.Getwd()
+	root, err = os.Getwd()
 
 	fmt.Println("Server Hosted")
 	http.HandleFunc("/share/", sharHandler)

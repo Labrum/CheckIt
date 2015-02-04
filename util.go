@@ -17,29 +17,29 @@ limitations under the License.
 package CheckIt
 
 import (
+	"bytes"
+	"errors"
 	"fmt"
 	"os/exec"
 	"strings"
-	"bytes"
 	"time"
-	"errors"
 )
 
 type Box interface {
 	Desc() (heading string, description string, text string, syntax string)
-	Run(textAreas []string,runPath string) ([]byte, error)
+	Run(textAreas []string, runPath string) ([]byte, error)
 }
 
 type Config struct {
-	Path       string
-	Port       string
-	About      string
-	AboutSide  string
-	Heading    string
+	Path      string
+	Port      string
+	About     string
+	AboutSide string
+	Heading   string
 }
 
 type Page struct {
-	Heading    string
+	Heading string
 }
 
 type AboutStruct struct {
@@ -75,7 +75,7 @@ func Lang(this []*BoxStruct, name string) string {
 
 func updateBody(this []*BoxStruct, text []string) {
 	for key := range this {
-			this[key].Body = text[key]
+		this[key].Body = text[key]
 	}
 }
 
@@ -98,27 +98,26 @@ func CombinedRun(timeout time.Duration, runPath string, args ...string) (out []b
 	kill := make(chan bool, 1)
 	completed := make(chan bool, 1)
 
-	go func(){
+	go func() {
 		time.Sleep(timeout)
-		kill<- true
+		kill <- true
 	}()
-	go func(){
+	go func() {
 		out, err = cmd.CombinedOutput()
-		completed<- true	
+		completed <- true
 	}()
 
 	select {
-		case <- completed:
-		case <- kill:
-			out = []byte("Error Command timed out!")
-			err = errors.New("Timed Out")
+	case <-completed:
+	case <-kill:
+		out = []byte("Error Command timed out!")
+		err = errors.New("Timed Out")
 	}
 
 	return out, err
 }
 
-
-func Run(timeout time.Duration, runPath string,args ...string) (out []byte, stderr []byte, err error) {
+func Run(timeout time.Duration, runPath string, args ...string) (out []byte, stderr []byte, err error) {
 
 	var buf bytes.Buffer
 	var errBuf bytes.Buffer
@@ -128,27 +127,26 @@ func Run(timeout time.Duration, runPath string,args ...string) (out []byte, stde
 	cmd.Stderr = &errBuf
 	cmd.Dir = runPath
 
-
 	kill := make(chan bool, 1)
 	completed := make(chan bool, 1)
 
-	go func(){
+	go func() {
 		time.Sleep(timeout)
-		kill<- true
+		kill <- true
 	}()
-	go func(){
+	go func() {
 		err = cmd.Run()
-		completed<- true	
+		completed <- true
 	}()
 
 	select {
-		case <- completed:
-		case <- kill:
-			out = []byte("Error Command timed out!")
-			err = errors.New("Timed Out")
-			return out, nil, err
+	case <-completed:
+	case <-kill:
+		out = []byte("Error Command timed out!")
+		err = errors.New("Timed Out")
+		return out, nil, err
 	}
 
-	return buf.Bytes(), errBuf.Bytes() , err
-	
+	return buf.Bytes(), errBuf.Bytes(), err
+
 }

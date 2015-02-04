@@ -87,7 +87,7 @@ func Save(path string, folderName string) {
 	var buff bytes.Buffer
 
 	os.MkdirAll(path+folderName, 0777)
-	
+
 	temp, _ := json.Marshal(configuration)
 	buff.WriteString(string(temp))
 	writeSave(path+folderName, "conf", buff.Bytes(), ".config")
